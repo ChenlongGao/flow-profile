@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.env
+*.log
+.DS_Store
+
+# 大文件
+*.db
+*.db-*
+*.mp4
+*.bak
+rtsp-server/videos/
+rtsp-server/mediamtx
+
+# 质量报告
+*report*.txt

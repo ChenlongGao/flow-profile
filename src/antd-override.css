@@ -1,0 +1,13 @@
+/* B端筛选区统一规范 */
+.ant-select-selector,
+.ant-picker,
+.ant-cascader {
+  height: 32px !important;
+  font-size: 12px !important;
+  border-radius: 6px !important;
+}
+.ant-select-selection-item,
+.ant-picker-input input {
+  font-size: 12px !important;
+  line-height: 32px !important;
+}

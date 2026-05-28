@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>智慧餐饮平台</title>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=d4faa84d1382a2b8197e9be5d0e1afa0&jscode=25240d5d1e3666231019a6346473b2cc&plugin=AMap.MouseTool,AMap.PlaceSearch,AMap.Geocoder,AMap.DistrictSearch"></script>
+    <script>
+      const t = localStorage.getItem('flow-profile-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
