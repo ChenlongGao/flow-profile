@@ -479,7 +479,7 @@ export const App: React.FC = () => {
     window.addEventListener('hashchange', handler)
     return () => window.removeEventListener('hashchange', handler)
   }, [])
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set(['alert-center','flow-center','data-center','config-center','report-center','location-center','system','location-dashboard','opportunity-center','expansion-center','guandian-dashboard','flow-alert-center','model-predict-center','model-diagnosis-center','inspection-dashboard','video-center','inspection-task','violation-center','inspection-report','training-center','zhendian-overview']))
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set(['alert-center','flow-center','data-center','config-center','report-center','location-center','system','location-dashboard','opportunity-center','expansion-center','guandian-dashboard','flow-alert-center','model-predict-center','model-diagnosis-center','inspection-dashboard','video-center','inspection-task','food-safety-center','violation-center','inspection-report','training-center','zhendian-overview']))
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
   const [activeTopNav, setActiveTopNav] = useState(() => getTopNavForKey(getPageFromHash()))
