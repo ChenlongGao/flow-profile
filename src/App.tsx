@@ -7,7 +7,7 @@ import {
   BellRing, LayoutDashboard, Stethoscope,
   BarChart3, Store, Building2, Database, FileText,
   Wrench, Bell, TrendingUp, Shield, User, Sun, Moon, Cloud, CalendarDays, LineChart, Clock, Timer,
-  MapPinned, MapPin, Target, ClipboardList, BriefcaseBusiness, SquarePlus, Video, ScanEye, Monitor, Cpu, MonitorCheck, AlertTriangle, Settings, Compass, Eye, ListChecks, Layers, Camera as CamIcon, Activity, GraduationCap, ClipboardCheck, BookOpen, ShieldCheck, Search, CheckCircle2, Brain, Zap,
+  MapPinned, MapPin, Target, ClipboardList, BriefcaseBusiness, SquarePlus, Video, ScanEye, Monitor, Cpu, MonitorCheck, AlertTriangle, Settings, Compass, Eye, ListChecks, Layers, Camera as CamIcon, Activity, GraduationCap, ClipboardCheck, BookOpen, ShieldCheck, Search, CheckCircle2, Brain, Zap, Library, Tags,
 } from 'lucide-react'
 import { StoreManagement } from './pages/StoreManagement'
 import { StoreTypeConfig, StoreLifecycleConfig, MallClassifications } from './pages/StoreConfig'
@@ -55,8 +55,8 @@ import { FoodSafetyPrevention } from './pages/FoodSafetyPrevention'
 import { VideoLive, VideoPlayback, VideoDevice } from './pages/InspectionPages'
 import { ViolationPending } from './pages/ViolationPending'
 import { ViolationRectify, ViolationArchive, InspectionStoreReport, InspectionFoodSafety } from './pages/InspectionMore'
-import { TrainingCourse, TrainingLearn, TrainingExam, TrainingResult } from './pages/TrainingPages'
-import { ZhendianOverview, ZhendianStoreDiagnosis, ZhendianSkills, ZhendianDataConnect, ZhendianSchedule } from './pages/ZhendianPages'
+import { TrainingCourse, TrainingLearn, TrainingExam, TrainingResult, KnowledgeCenter } from './pages/TrainingPages'
+import { ZhendianOverview, ZhendianStoreDiagnosis, ZhendianSkills, ZhendianDataConnect, ZhendianSchedule, StoreDynamicTags } from './pages/ZhendianPages'
 
 /* ─── 导航树（对齐 PRD_PLAN.md） ─── */
 interface NavChild { key: string; icon: React.ElementType; label: string }
@@ -106,11 +106,11 @@ const navGroups: NavGroup[] = [
       { key: 'expansion-goal-dashboard', icon: Target, label: '目标管理' },
     ],
   },
-  // 5. 巡检工作台
+  // 5. 巡检看板
   {
     key: 'inspection-dashboard',
     icon: LayoutDashboard,
-    label: '巡检工作台',
+    label: '巡检看板',
     children: [
       { key: 'inspection-overview', icon: Eye, label: '数据总览' },
       { key: 'inspection-todo', icon: ClipboardCheck, label: '待办中心' },
@@ -134,11 +134,11 @@ const navGroups: NavGroup[] = [
     icon: ClipboardList,
     label: '巡检任务',
     children: [
+      { key: 'inspection-task-list', icon: ClipboardCheck, label: '任务清单' },
       { key: 'inspection-realtime', icon: CamIcon, label: '实时巡检' },
       { key: 'inspection-combo', icon: Layers, label: '组合巡检' },
       { key: 'inspection-process', icon: ListChecks, label: '流程巡检' },
       { key: 'inspection-spot', icon: Search, label: '临时抽检' },
-      { key: 'inspection-task-list', icon: ClipboardCheck, label: '任务清单' },
       { key: 'food-safety-check', icon: Shield, label: '食安巡检' },
     ],
   },
@@ -164,12 +164,13 @@ const navGroups: NavGroup[] = [
       { key: 'inspection-food-safety', icon: ShieldCheck, label: '食安合规报告' },
     ],
   },
-  // 10. 培训学习考试
+  // 10. 培学练考
   {
     key: 'training-center',
     icon: GraduationCap,
-    label: '培训学习考试',
+    label: '培学练考',
     children: [
+      { key: 'training-knowledge', icon: Library, label: '知识空间' },
       { key: 'training-course', icon: BookOpen, label: '课程中心' },
       { key: 'training-exam', icon: ClipboardCheck, label: '专项考试' },
       { key: 'training-result', icon: BarChart3, label: '学情考核' },
@@ -190,6 +191,7 @@ const navGroups: NavGroup[] = [
     icon: Stethoscope,
     label: '单店诊断',
     children: [
+      { key: 'zhendian-store-tags', icon: Tags, label: '门店动态标签' },
       { key: 'zhendian-store-diag', icon: Stethoscope, label: '单店深度诊断' },
     ],
   },
@@ -386,11 +388,13 @@ const pageComponents: Record<string, React.FC> = {
   'food-safety-prevention': FoodSafetyPrevention,
   'inspection-store-report': InspectionStoreReport,
   'inspection-food-safety': InspectionFoodSafety,
+  'training-knowledge': KnowledgeCenter,
   'training-course': TrainingCourse,
   'training-exam': TrainingExam,
   'training-result': TrainingResult,
   'zhendian-overview-main': ZhendianOverview,
   'zhendian-store-diag': ZhendianStoreDiagnosis,
+  'zhendian-store-tags': StoreDynamicTags,
   'zhendian-skills-main': ZhendianSkills,
   'zhendian-connect-main': ZhendianDataConnect,
   'zhendian-schedule-main': ZhendianSchedule,

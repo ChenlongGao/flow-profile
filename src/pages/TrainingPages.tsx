@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BookOpen, GraduationCap, Brain, TrendingUp, CheckCircle2, AlertTriangle, Search, Clock, BarChart3, ChevronRight, ArrowLeft, Users, Play, Eye, EyeOff, Filter, Zap, Star, Download, Send, Shield, Calendar, BookMarked } from 'lucide-react'
+import { BookOpen, GraduationCap, Brain, TrendingUp, CheckCircle2, AlertTriangle, Search, Clock, BarChart3, ChevronRight, ArrowLeft, Users, Play, Eye, EyeOff, Filter, Zap, Star, Download, Send, Shield, Calendar, BookMarked, Library, Wrench, User, ShieldCheck, FileText } from 'lucide-react'
 import { Tag, Button, Tabs, Select, Progress, Input, Slider, Switch, message, Modal, Checkbox, Pagination } from 'antd'
 
 /* ═══ 课程中心 ═══ */
@@ -960,4 +960,162 @@ export const TrainingResult: React.FC = () => {
       </div>
     </div>
   )
+}
+
+/* ═══ 知识空间 ═══ */
+const SPACES=[
+  {id:'s1',name:'食品安全管理',desc:'食品加工、储存、消毒全流程管理规范',icon:<ShieldCheck className="w-5 h-5"/>,color:'#10B981',count:128,pending:0,packages:[
+    {id:'p1',name:'食材管理规范',desc:'食材验收、储存、加工全流程',count:32,featured:[
+      {title:'食材验收标准',type:'doc',desc:'新鲜度、保质期、供应商资质核查标准',author:'食安部',date:'2026-05-15'},
+      {title:'冷藏冷冻温度管理',type:'doc',desc:'不同食材最佳储存温度参考表',author:'设备部',date:'2026-04-20'},
+      {title:'食材先进先出制度',type:'doc',desc:'FIFO管理流程与标签规范',author:'运营部',date:'2026-05-01'},
+      {title:'食品添加剂使用规范',type:'doc',desc:'GB2760标准解读与实操指南',author:'食安部',date:'2026-03-10'},
+    ],items:[
+      {title:'生熟食品分区存放标准',type:'知识卡片',tag:'操作',date:'2026-05-20'},
+      {title:'食材入库检验流程图',type:'素材',tag:'流程图',date:'2026-05-18'},
+      {title:'干货存储温湿度要求',type:'知识卡片',tag:'仓储',date:'2026-04-15'},
+      {title:'冷链物流交接规范',type:'素材',tag:'物流',date:'2026-04-12'},
+      {title:'食材保质期管理表',type:'知识卡片',tag:'管理',date:'2026-03-28'},
+      {title:'供应商资质审核清单',type:'素材',tag:'审核',date:'2026-03-20'},
+      {title:'食材验收视觉标准',type:'知识卡片',tag:'视觉',date:'2026-02-15'},
+      {title:'进口食材报关流程',type:'素材',tag:'进口',date:'2026-01-10'},
+    ]},
+    {id:'p2',name:'消毒与清洁规范',desc:'操作区、设备、工具消毒流程',count:24,featured:[
+      {title:'后厨消毒操作手册',desc:'每日消毒液配比、操作步骤、责任人',author:'食安部',date:'2026-05-10'},
+      {title:'餐具清洗消毒四步法',desc:'一冲二洗三消四保洁标准流程',author:'培训部',date:'2026-04-25'},
+      {title:'突发疫情消毒预案',desc:'发现食源性疾病时的应急消毒方案',author:'食安部',date:'2026-03-15'},
+      {title:'消毒柜使用与维护',desc:'不同型号消毒柜操作指南及维护周期',author:'设备部',date:'2026-02-20'},
+    ],items:[
+      {title:'消毒液浓度配比表',type:'知识卡片',tag:'配比',date:'2026-05-05'},
+      {title:'清洁工具分区管理图',type:'素材',tag:'分区',date:'2026-04-15'},
+      {title:'食品接触面消毒频率',type:'知识卡片',tag:'频率',date:'2026-03-22'},
+      {title:'消毒记录表模板',type:'素材',tag:'记录',date:'2026-02-10'},
+      {title:'夜间全面消杀流程',type:'知识卡片',tag:'夜间',date:'2026-01-25'},
+    ]},
+  ]},
+  {id:'s2',name:'门店运营SOP',desc:'门店开业、营业、收市标准化操作流程',icon:<FileText className="w-5 h-5"/>,color:'#3B82F6',count:56,pending:0,packages:[
+    {id:'p3',name:'开门营业流程',desc:'开店前检查、设备开启、迎宾准备',count:18,featured:[
+      {title:'开门检查清单',desc:'8大项25小项开店前必检内容',author:'运营部',date:'2026-05-15'},
+      {title:'收银机日初始化流程',desc:'POS开机、对账、备用金准备步骤',author:'财务部',date:'2026-05-01'},
+      {title:'门店灯光系统检查',desc:'各区域灯光亮度标准与故障上报流程',author:'设备部',date:'2026-04-10'},
+      {title:'迎宾区布置规范',desc:'迎宾台、展示柜、宣传物料摆放标准',author:'市场部',date:'2026-03-15'},
+    ],items:[
+      {title:'开店时间管理表',type:'知识卡片',tag:'时间',date:'2026-05-20'},
+      {title:'开门检查拍照模板',type:'素材',tag:'拍照',date:'2026-04-18'},
+      {title:'早班会议流程',type:'知识卡片',tag:'会议',date:'2026-03-25'},
+      {title:'设备启动顺序图',type:'素材',tag:'设备',date:'2026-02-15'},
+    ]},
+    {id:'p4',name:'高峰运营管理',desc:'午晚市高峰期人员排班、出餐效率管理',count:20,featured:[
+      {title:'午市高峰排班表',desc:'11:00-14:00人员安排与角色职责',author:'运营部',date:'2026-05-10'},
+      {title:'收银效率提升方案',desc:'减少排队时间的5项措施与考核指标',author:'运营部',date:'2026-04-20'},
+      {title:'外卖交接标准流程',desc:'打包→贴签→核单→交付四步标准',author:'外卖部',date:'2026-03-10'},
+      {title:'突发客流应急方案',desc:'排队超10人时的应急增开方案',author:'运营部',date:'2026-02-25'},
+    ],items:[
+      {title:'高峰出餐速度标准',type:'知识卡片',tag:'速度',date:'2026-05-12'},
+      {title:'外卖打包区布置图',type:'素材',tag:'布置',date:'2026-04-20'},
+      {title:'收银台紧急处理流程',type:'知识卡片',tag:'紧急',date:'2026-03-15'},
+    ]},
+  ]},
+  {id:'s3',name:'员工行为规范',desc:'仪容仪表、服务标准、岗位职责',icon:<User className="w-5 h-5"/>,color:'#8B5CF6',count:42,pending:2,packages:[
+    {id:'p5',name:'仪容仪表标准',desc:'穿戴、个人卫生、礼仪规范',count:22,featured:[
+      {title:'后厨着装标准',desc:'工服、帽子、口罩、围裙穿戴规范',author:'HR部',date:'2026-05-01'},
+      {title:'前厅服务仪容',desc:'淡妆上岗、发型规范、饰品限制',author:'HR部',date:'2026-04-15'},
+      {title:'手部卫生管理制度',desc:'洗手七步法、消毒频次要求',author:'食安部',date:'2026-03-20'},
+      {title:'指甲与饰品管理规定',desc:'从业禁止佩戴饰品清单',author:'HR部',date:'2026-02-10'},
+    ],items:[
+      {title:'仪容仪表检查表',type:'知识卡片',tag:'检查',date:'2026-05-10'},
+      {title:'标准着装示意图',type:'素材',tag:'视觉',date:'2026-04-25'},
+      {title:'个人卫生考核标准',type:'知识卡片',tag:'考核',date:'2026-03-15'},
+    ]},
+  ]},
+  {id:'s4',name:'消防安全管理',desc:'消防设施、通道、应急演练规范',icon:<AlertTriangle className="w-5 h-5"/>,color:'#EF4444',count:28,pending:3,packages:[
+    {id:'p6',name:'消防设施管理',desc:'灭火器、消防栓、烟感维护标准',count:16,featured:[
+      {title:'灭火器检查规范',desc:'每月检查项目、压力表读数标准',author:'安全部',date:'2026-05-05'},
+      {title:'消防通道管理制度',desc:'通道宽度标准、堆物处罚规定',author:'安全部',date:'2026-04-10'},
+      {title:'应急疏散演练方案',desc:'每季度演练流程、角色分工',author:'安全部',date:'2026-03-15'},
+      {title:'火灾隐患排查清单',desc:'后厨/仓库/前厅23项排查点',author:'安全部',date:'2026-02-20'},
+    ],items:[
+      {title:'消防器材分布图',type:'素材',tag:'分布',date:'2026-05-10'},
+      {title:'月度消防检查表',type:'知识卡片',tag:'检查',date:'2026-04-15'},
+      {title:'火灾应急预案',type:'知识卡片',tag:'应急',date:'2026-03-01'},
+      {title:'应急照明测试记录',type:'素材',tag:'测试',date:'2026-02-10'},
+    ]},
+  ]},
+]
+
+export const KnowledgeCenter: React.FC = () => {
+  const[selSpace,setSelSpace]=useState(SPACES[0].id)
+  const[selPkg,setSelPkg]=useState(SPACES[0].packages[0].id)
+  const space=SPACES.find(s=>s.id===selSpace)||SPACES[0]
+  const pkg=space.packages.find(p=>p.id===selPkg)||space.packages[0]
+  const[listTab,setListTab]=useState('全部')
+  
+  let filtered=pkg.items.filter(i=>listTab==='全部'||i.type===listTab)
+  
+  return <div className="p-6 h-full flex flex-col overflow-hidden">
+    <div className="shrink-0 mb-3"><h2 className="text-base font-semibold text-[var(--text-primary)] flex items-center gap-2"><Library className="w-4 h-4"/>知识空间</h2></div>
+    <div className="flex-1 flex gap-4 overflow-hidden">
+      {/* ═══ 左侧：分类导航列表 ═══ */}
+      <div className="w-52 shrink-0 overflow-y-auto">
+        {SPACES.map(s=>{
+          const isActive=s.id===selSpace
+          return <div key={s.id} className={'flex items-center gap-3 px-3 py-3 cursor-pointer transition-all border-b border-[var(--border-subtle)] last:border-b-0 '+(isActive?'bg-red-50/60 border-r-2 border-r-red-500 ':'hover:bg-[var(--bg-tertiary)] border-r-2 border-r-transparent')} onClick={()=>{setSelSpace(s.id);setSelPkg(s.packages[0].id)}}>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{background:`${s.color}15`,color:s.color}}>{s.icon}</div>
+            <div className="min-w-0 flex-1">
+              <div className="text-xs font-medium text-[var(--text-primary)] truncate">{s.name}</div>
+              <div className="text-[10px] text-[var(--text-muted)] mt-0.5 flex items-center gap-2">
+                <span>{s.count}篇文档</span>
+                {s.pending>0&&<span className="text-red-500 font-medium">· {s.pending}项待处理</span>}
+              </div>
+            </div>
+            {s.pending>0&&<div className="w-4 h-4 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center shrink-0 font-medium">{s.pending}</div>}
+          </div>
+        })}
+      </div>
+      {/* ═══ 右侧：知识内容 ═══ */}
+      <div className="flex-1 overflow-y-auto space-y-3">
+        {/* 分类标题 + 知识包标签 */}
+        <div>
+          <div className="text-base font-semibold text-[var(--text-primary)]">{space.name}</div>
+          <div className="flex items-center gap-2 mt-2 flex-wrap">{space.packages.map(p=><div key={p.id} className={'px-2.5 py-1 text-[11px] rounded-lg cursor-pointer transition-all font-medium '+(p.id===selPkg?'bg-red-500 text-white shadow-sm':'bg-red-50 text-red-500 hover:bg-red-100')} onClick={()=>setSelPkg(p.id)}>{p.name}({p.count})</div>)}</div>
+        </div>
+        {/* 重点知识卡片 */}
+        <div className="card-level-1 p-4 space-y-3">
+          <div className="text-xs font-semibold text-[var(--text-primary)] flex items-center gap-1.5"><Star className="w-3.5 h-3.5 text-amber-400"/>重点知识</div>
+          <div className="grid grid-cols-2 gap-3">
+            {pkg.featured.slice(0,4).map((f,i)=><div key={i} className="p-3 rounded-lg border border-red-500/15 bg-red-500/5 hover:border-red-500/30 transition-colors cursor-pointer space-y-1.5">
+              <div className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0"/><span className="text-[11px] font-semibold text-[var(--text-primary)]">{f.title}</span></div>
+              <div className="text-[9px] text-[var(--text-muted)] leading-relaxed">{f.desc}</div>
+              <div className="flex items-center gap-2 text-[8px] text-[var(--text-muted)]"><span className="text-red-400">{f.author}</span><span>{f.date}</span></div>
+            </div>)}
+          </div>
+        </div>
+        {/* 更多知识：表格 + Tab切换 */}
+        <div className="card-level-1 p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="text-xs font-semibold text-[var(--text-primary)]">更多知识 · {pkg.name}</div>
+            <div className="flex items-center gap-1 bg-[var(--bg-tertiary)] rounded-md p-0.5">
+              {['全部','知识卡片','素材'].map(t=><div key={t} className={'px-2.5 py-1 text-[10px] rounded cursor-pointer transition-all '+(listTab===t?'bg-[var(--bg-primary)] text-[var(--text-primary)] shadow-sm':'text-[var(--text-muted)]')} onClick={()=>setListTab(t)}>{t}</div>)}
+            </div>
+          </div>
+          <div className="card-level-1 overflow-hidden" style={{padding:0}}>
+            <table className="w-full text-xs">
+              <thead className="bg-[var(--bg-secondary)] border-b border-[var(--border-subtle)]"><tr>
+                <td className="px-4 py-2 font-medium text-[var(--text-muted)]">名称</td>
+                <td className="px-3 py-2 font-medium text-[var(--text-muted)] w-16 text-center">类型</td>
+                <td className="px-3 py-2 font-medium text-[var(--text-muted)] w-16 text-center">标签</td>
+                <td className="px-3 py-2 font-medium text-[var(--text-muted)] w-20 text-right">更新日期</td>
+              </tr></thead>
+              <tbody>{filtered.map((it,i)=><tr key={i} className="border-b border-[var(--border-subtle)] hover:bg-[var(--bg-tertiary)] cursor-pointer">
+                <td className={'px-4 py-2 '+(it.type==='知识卡片'?'text-[var(--text-primary)]':'text-[var(--text-muted)]')}>{it.title}</td>
+                <td className="px-3 py-2 text-center"><span className="text-[10px] px-1.5 py-0.5 rounded" style={{background:it.type==='知识卡片'?'rgba(59,130,246,0.1)':'rgba(139,92,246,0.1)',color:it.type==='知识卡片'?'#3B82F6':'#8B5CF6'}}>{it.type}</span></td>
+                <td className="px-3 py-2 text-center text-[var(--text-muted)]">{it.tag}</td>
+                <td className="px-3 py-2 text-right text-[var(--text-muted)]">{it.date}</td>
+              </tr>)}</tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 }

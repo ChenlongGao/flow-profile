@@ -15,15 +15,80 @@ export const InspectionSchedule: React.FC = () => (
   </div>
 )
 
-export const InspectionSpot: React.FC = () => (
-  <div className="p-6 space-y-4 overflow-y-auto h-full"><div><h2 className="text-base font-semibold text-[var(--text-primary)]">临时抽检</h2><p className="text-xs text-[var(--text-muted)] mt-0.5">手动发起突击巡检·现场抓拍AI识别</p></div>
-    <div className="card-level-1 p-4 space-y-3 flex items-center gap-4"><Select size="small" defaultValue="IFS国金中心" style={{width:150}} options={[{value:'IFS国金中心',label:'IFS国金中心'}]}/>
-    <Select size="small" defaultValue="前厅" style={{width:120}} options={['前厅','后厨','仓库','外围'].map(v=>({value:v,label:v}))}/>
-    <Select size="small" defaultValue="全流程" style={{width:150}} options={['全流程','环境卫生','人员规范','后厨食安'].map(v=>({value:v,label:v}))}/>
-    <Button size="small" type="primary" icon={<Search className="w-3 h-3"/>}>发起临时抽检</Button></div>
-    <div className="card-level-1 p-8 text-center text-sm text-[var(--text-muted)] aspect-video flex items-center justify-center bg-[#0f172a]"><Camera className="w-8 h-8 text-gray-600 mr-3"/>未发起抽检，点击上方按钮开始</div>
-  </div>
-)
+/* ═══ 临时抽检 ═══ */
+export const InspectionSpot: React.FC = () => {
+  const [showCreate,setShowCreate]=useState(false)
+  const [storeVal,setStoreVal]=useState('全部')
+  const spotTasks=Array.from({length:28},(_,i)=>{
+    const stores=['IFS国金中心','太平街店','德思勤店','悦方ID店','梅溪湖步步高店','开福万达店','湖滨银泰店','广州天河城店','深圳万象天地','成都太古里店','南京新街口店','重庆解放碑店','武汉楚河汉街店','青岛万象城店']
+    const zones=['前厅','后厨','仓库','外围','收银台','外卖打包','出入口']
+    const types=['全流程','环境卫生','人员规范','后厨食安','设备检查','消防安全']
+    const storeTags=[['A级商圈','高客单价'],['巡检优秀'],['成熟门店','客流上升'],['培训优秀'],['客流下降'],['ROI预警'],['新开门店'],['巡检待改进'],['培训预警'],['低客单价'],[],['成熟门店','高客单价'],['客流上升','巡检优秀'],['培训优秀','客流上升']]
+    const deviceTags=[['高清摄像头','AI识别'],['夜视摄像头'],['红外测温'],['RTSP流媒体'],['4K超清','AI边缘计算'],['高清摄像头'],['夜视摄像头','AI识别'],['红外测温','RTSP'],['4K超清'],['AI边缘计算'],['高清摄像头','夜视'],['RTSP流媒体'],['AI识别','4K'],['红外测温']]
+    const statuses=['已完成','进行中','已完成','待复核','已完成','已完成','进行中','已完成']
+    const assignees=['张拓','李婷','王鹏','陈静','刘洋','赵敏','周明','吴芳']
+    return {id:`SP${String(i+1).padStart(3,'0')}`,store:stores[i%stores.length],zone:zones[i%zones.length],type:types[i%types.length],time:`2026-05-${22+Math.floor(i/4)} ${String(9+i%10).padStart(2,'0')}:${String(i*17%60).padStart(2,'0')}:00`,assignee:assignees[i%assignees.length],status:statuses[i%statuses.length],items:3+Math.floor(Math.random()*8),violations:Math.floor(Math.random()*4),storeTags:storeTags[i%storeTags.length],deviceTags:deviceTags[i%deviceTags.length]}
+  })
+  let filtered=spotTasks.filter(t=>storeVal==='全部'||t.store===storeVal)
+  return (
+    <div className="p-6 h-full flex flex-col overflow-hidden">
+      <div className="shrink-0 space-y-3">
+        <div className="flex items-center justify-between"><div><h2 className="text-base font-semibold text-[var(--text-primary)]">临时抽检</h2><p className="text-xs text-[var(--text-muted)] mt-0.5">手动发起突击巡检·现场抓拍AI识别 · 共{spotTasks.length}条记录</p></div><Button size="middle" type="primary" icon={<Plus className="w-3.5 h-3.5"/>} onClick={()=>setShowCreate(true)}>新建抽检</Button></div>
+        <div className="flex items-center gap-3">
+          <Select size="middle" value={storeVal} onChange={setStoreVal} style={{width:140}} options={[{value:'全部',label:'全部门店'},...[...new Set(spotTasks.map(t=>t.store))].map(s=>({value:s,label:s}))]}/>
+          <Input size="middle" prefix={<Search className="w-3 h-3"/>} placeholder="搜索..." style={{width:160}}/>
+          <div className="flex-1"/>
+        </div>
+      </div>
+      <div className="flex-1 overflow-y-auto mt-2">
+        <div className="card-level-1 overflow-hidden" style={{padding:0}}>
+          <table className="w-full text-xs">
+            <thead className="bg-[var(--bg-secondary)] border-b border-[var(--border-subtle)] sticky top-0"><tr>
+              <th className="px-3 py-2 text-left">编号</th><th className="px-3 py-2 text-left">门店</th>
+              <th className="px-2 py-2 text-left">区域</th><th className="px-2 py-2 text-left">类型</th>
+              <th className="px-2 py-2 text-center">巡检项</th><th className="px-2 py-2 text-center">违规</th>
+              <th className="px-3 py-2 text-left">负责人</th><th className="px-2 py-2">时间</th><th className="px-2 py-2 text-center">状态</th>
+              <th className="px-2 py-2 text-left" style={{maxWidth:120}}>门店标签</th><th className="px-2 py-2 text-left" style={{maxWidth:120}}>设备标签</th>
+            </tr></thead>
+            <tbody>{filtered.map(t=><tr key={t.id} className="border-b border-[var(--border-subtle)] hover:bg-[var(--bg-tertiary)]">
+              <td className="px-3 py-1.5 text-[var(--text-muted)]">{t.id}</td>
+              <td className="px-3 py-1.5 font-medium text-[var(--text-primary)]">{t.store}</td>
+              <td className="px-2 py-1.5 text-[var(--text-secondary)]">{t.zone}</td>
+              <td className="px-2 py-1.5"><Tag color="blue" style={{fontSize:10}}>{t.type}</Tag></td>
+              <td className="px-2 py-1.5 text-center text-[var(--text-primary)]">{t.items}</td>
+              <td className="px-2 py-1.5 text-center" style={{color:t.violations>0?'#EF4444':'#10B981'}}>{t.violations}</td>
+              <td className="px-3 py-1.5 text-[var(--text-secondary)]">{t.assignee}</td>
+              <td className="px-2 py-1.5 text-[var(--text-muted)]" style={{fontSize:10}}>{t.time}</td>
+              <td className="px-2 py-1.5 text-center"><Tag color={t.status==='已完成'?'green':t.status==='进行中'?'blue':'orange'} style={{fontSize:10}}>{t.status}</Tag></td>
+              <td className="px-2 py-1.5"><div className="flex flex-wrap gap-1">{t.storeTags.map((st:string)=><span key={st} className="text-[9px] px-1 py-0.5 rounded bg-blue-500/10 text-blue-400">{st}</span>)}</div></td>
+              <td className="px-2 py-1.5"><div className="flex flex-wrap gap-1">{t.deviceTags.map((dt:string)=><span key={dt} className="text-[9px] px-1 py-0.5 rounded bg-purple-500/10 text-purple-400">{dt}</span>)}</div></td>
+            </tr>)}</tbody>
+          </table>
+        </div>
+      </div>
+      {/* ═══ 新建抽检抽屉 ═══ */}
+      <Drawer title="新建临时抽检任务" placement="right" width={480} open={showCreate} onClose={()=>setShowCreate(false)}>
+        <div className="space-y-4" style={{marginTop:-24}}>
+          <div><div className="text-[10px] text-[var(--text-muted)] mb-1">目标门店</div><Select size="middle" style={{width:'100%'}} placeholder="选择门店" options={['IFS国金中心','太平街店','德思勤店','悦方ID店','梅溪湖步步高店','开福万达店','湖滨银泰店','广州天河城店','深圳万象天地','成都太古里店','南京新街口店','重庆解放碑店','武汉楚河汉街店','青岛万象城店'].map(s=>({value:s,label:s}))}/></div>
+          <div className="grid grid-cols-2 gap-3">
+            <div><div className="text-[10px] text-[var(--text-muted)] mb-1">巡检区域</div><Select size="middle" style={{width:'100%'}} defaultValue="前厅" options={['前厅','后厨','仓库','外围','收银台','外卖打包','出入口'].map(v=>({value:v,label:v}))}/></div>
+            <div><div className="text-[10px] text-[var(--text-muted)] mb-1">巡检类型</div><Select size="middle" style={{width:'100%'}} defaultValue="全流程" options={['全流程','环境卫生','人员规范','后厨食安','设备检查','消防安全'].map(v=>({value:v,label:v}))}/></div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div><div className="text-[10px] text-[var(--text-muted)] mb-1">负责人</div><Select size="middle" style={{width:'100%'}} placeholder="选择负责人" options={['张拓','李婷','王鹏','陈静','刘洋','赵敏','周明','吴芳'].map(v=>({value:v,label:v}))}/></div>
+            <div><div className="text-[10px] text-[var(--text-muted)] mb-1">执行时间</div><Input size="middle" placeholder="如：2026-05-28 14:00"/></div>
+          </div>
+          <div><div className="text-[10px] text-[var(--text-muted)] mb-1">门店标签</div>
+            <div className="flex flex-wrap gap-1.5">{['A级商圈','高客单价','客流上升','巡检优秀','成熟门店','培训优秀','新开门店','客流下降','ROI预警'].map(t=><span key={t} className="text-[10px] px-2 py-1 rounded cursor-pointer border border-[var(--border-subtle)] hover:border-blue-400 hover:bg-blue-50 text-[var(--text-secondary)]">{t}</span>)}</div></div>
+          <div><div className="text-[10px] text-[var(--text-muted)] mb-1">设备标签</div>
+            <div className="flex flex-wrap gap-1.5">{['高清摄像头','AI识别','夜视摄像头','红外测温','RTSP流媒体','4K超清','AI边缘计算'].map(t=><span key={t} className="text-[10px] px-2 py-1 rounded cursor-pointer border border-[var(--border-subtle)] hover:border-purple-400 hover:bg-purple-50 text-[var(--text-secondary)]">{t}</span>)}</div></div>
+          <div><div className="text-[10px] text-[var(--text-muted)] mb-1">巡检说明</div><Input.TextArea size="middle" placeholder="描述本次抽检的具体内容..." rows={3}/></div>
+          <div className="flex justify-end gap-2 pt-2"><Button onClick={()=>setShowCreate(false)}>取消</Button><Button type="primary" onClick={()=>{message.success('抽检任务已创建');setShowCreate(false)}}>确认创建</Button></div>
+        </div>
+      </Drawer>
+    </div>
+  )
+}
 
 export const InspectionStandard: React.FC = () => {
   const groups = [
@@ -335,6 +400,7 @@ export const InspectionStoreReport: React.FC = () => {
   const [modeTab,setModeTab]=useState('全部')
   const [storeFilter,setStoreFilter]=useState('全部')
   const [page,setPage]=useState(1);const ps=10
+  const [selectedReport,setSelectedReport]=useState<any>(null)
 
   const stores=['IFS国金中心','太平街店','德思勤店','悦方ID店','梅溪湖步步高店','开福万达店','湖滨银泰店','广州天河城店','深圳万象天地','成都太古里店','南京新街口店','重庆解放碑店']
   const modes=['实时巡检','组合巡检','流程巡检','临时抽检']
@@ -342,17 +408,37 @@ export const InspectionStoreReport: React.FC = () => {
   const reports=Array.from({length:48},(_,i)=>{
     const store=stores[i%stores.length]
     const mode=modes[i%4]
+    const deducted=(Math.floor(Math.random()*9))*5 // 0~40, 步长5
+    const score=100-deducted
+    const items=5+Math.floor(Math.random()*10)
+    const failed=deducted>0?1+Math.floor(deducted/10):0
+    const passed=items-Math.min(failed,items-1)
+    const level=score>=90?'优秀':score>=80?'良好':score>=70?'合格':'待改进'
+    // 构建巡检项明细，确保扣分合计=deducted
+    let remaining=deducted
+    const details=Array.from({length:8},(_,j)=>{
+      const name=['后厨卫生检查','前厅地面清洁','餐具摆放规范','垃圾桶加盖管理','收银台整洁度','食材存放规范','员工仪容仪表','消防通道畅通'][j]
+      let ddd=0
+      if(remaining>0&&j>=3+Math.floor(Math.random()*3)){
+        ddd=Math.min(remaining,Math.ceil(remaining/(8-j)))
+        remaining-=ddd
+      }
+      return {name,result:ddd>0?'未通过':'通过',deduct:ddd,comment:ddd>0?'AI摄像头识别到违规，详见问题描述':''}
+    })
     return {
       id:`RPT${String(i+1).padStart(3,'0')}`,
       store,mode,
       period:`2026-05-${10+Math.floor(i/12)}`,
-      score:60+Math.floor(Math.random()*40),
-      items:5+Math.floor(Math.random()*10),
-      passed:3+Math.floor(Math.random()*8),
-      failed:Math.floor(Math.random()*3),
-      deducted:(Math.floor(Math.random()*5))*5,
+      score,items,passed,failed,deducted,
       cameras:3+Math.floor(Math.random()*12),
-      level:['优秀','良好','合格','待改进'][Math.floor(Math.random()*4)],
+      level,
+      details,
+      problems:[
+        '后厨未佩戴厨师帽（AI摄像头自动识别）',
+        '垃圾桶未加盖（后厨全景摄像头抓拍）',
+        '食材存放生熟未分离（冷冻柜摄像头监测）',
+        '消防通道堆有杂物（通道摄像头报警）',
+      ].slice(0,1+Math.floor(Math.random()*4)),
     }
   })
 
@@ -400,7 +486,7 @@ export const InspectionStoreReport: React.FC = () => {
                   <td className="px-3 py-2.5 text-center"><span className="font-medium" style={{color:r.score>=80?'#10B981':r.score>=60?'#F59E0B':'#EF4444'}}>{r.score}</span></td>
                   <td className="px-3 py-2.5 text-center"><Tag color={lvlColor} style={{fontSize:12}}>{r.level}</Tag></td>
                   <td className="px-3 py-2.5 text-center text-[var(--text-muted)]">{r.cameras}</td>
-                  <td className="px-3 py-2.5 text-center"><Button size="small" type="link" style={{fontSize:12}}>查看</Button></td>
+                  <td className="px-3 py-2.5 text-center"><Button size="small" type="link" style={{fontSize:12}} onClick={()=>setSelectedReport(r)}>查看</Button></td>
                 </tr>)
               })}
             </tbody>
@@ -408,9 +494,44 @@ export const InspectionStoreReport: React.FC = () => {
         </div>
       </div>
       <div className="shrink-0 flex items-center justify-between pt-3 border-t border-[var(--border-subtle)]">
-        <span className="text-[10px] text-[var(--text-muted)]">共 {filtered.length} 份报告，第 {page}/{Math.ceil(filtered.length/ps)} 页</span>
+        <span className="text-[10px] text-[var(--text-muted)]">    共 {filtered.length} 份报告，第 {page}/{Math.ceil(filtered.length/ps)} 页</span>
         <Pagination current={page} pageSize={ps} total={filtered.length} onChange={setPage} size="small" showSizeChanger={false}/>
       </div>
+      {/* ═══ 巡检报告详情弹窗 ═══ */}
+      <Drawer title={null} placement="right" width={600} open={!!selectedReport} onClose={()=>setSelectedReport(null)}
+        extra={<Button size="small" type="text" icon={<ArrowLeft className="w-3.5 h-3.5"/>} onClick={()=>setSelectedReport(null)}>返回列表</Button>}>
+        {selectedReport&&<div className="space-y-4" style={{marginTop:-8}}>
+          <div className="flex items-center justify-between">
+            <div><h3 className="text-base font-semibold text-[var(--text-primary)]">{selectedReport.store} · 巡检报告</h3>
+              <p className="text-[10px] text-[var(--text-muted)] mt-0.5">{selectedReport.period} · {selectedReport.mode} · 报告编号 {selectedReport.id}</p></div>
+          </div>
+          <div className="grid grid-cols-4 gap-3">
+            {[{l:'巡检得分',v:selectedReport.score+'分',c:selectedReport.score>=80?'#10B981':selectedReport.score>=60?'#F59E0B':'#EF4444'},
+              {l:'巡检等级',v:selectedReport.level,c:selectedReport.level==='优秀'?'#10B981':selectedReport.level==='良好'?'#3B82F6':selectedReport.level==='合格'?'#F59E0B':'#EF4444'},
+              {l:'通过项',v:selectedReport.passed+'项',c:'#10B981'},
+              {l:'未通过',v:selectedReport.failed+'项',c:'#EF4444'}].map((k,i)=><div key={i} className="card-level-1 p-3 text-center"><div className="text-[10px] text-[var(--text-muted)]">{k.l}</div><div className="text-lg font-bold mt-1" style={{color:k.c}}>{k.v}</div></div>)}
+          </div>
+          <div className="card-level-1 overflow-hidden" style={{padding:0}}>
+            <div className="px-4 py-2 border-b border-[var(--border-subtle)] text-xs font-semibold text-[var(--text-primary)] bg-[var(--bg-secondary)]">巡检项明细</div>
+            <table className="w-full text-[11px]"><thead className="border-b border-[var(--border-subtle)] text-[var(--text-muted)]"><tr>
+              <td className="px-4 py-1.5" style={{width:'55%'}}>巡检项目</td><td className="px-3 py-1.5 text-center" style={{width:80}}>结果</td><td className="px-3 py-1.5 text-center" style={{width:60}}>扣分</td></tr></thead>
+            <tbody>{selectedReport.details.map((d:any,i:number)=><tr key={i} className="border-b border-[var(--border-subtle)] hover:bg-[var(--bg-tertiary)]">
+              <td className="px-4 py-1.5 text-[var(--text-primary)]" style={{width:'55%'}}>{d.name}{d.comment&&<div className="text-[9px] text-red-400 mt-0.5">{d.comment}</div>}</td>
+              <td className="px-3 py-1.5 text-center" style={{width:80}}><span style={{color:d.result==='通过'?'#10B981':'#EF4444',fontSize:11}}>{d.result}</span></td>
+              <td className="px-3 py-1.5 text-center text-red-400" style={{width:60}}>{d.deduct>0?'-'+d.deduct:'-'}</td></tr>)}</tbody></table>
+          </div>
+          {selectedReport.problems.length>0&&<div className="card-level-1 p-4">
+            <div className="text-xs font-semibold text-[var(--text-primary)] mb-2 flex items-center gap-2"><AlertTriangle className="w-3.5 h-3.5 text-red-400"/>发现问题</div>
+            <div className="space-y-1.5">{selectedReport.problems.map((p:string,i:number)=><div key={i} className="flex items-start gap-2 text-[11px]"><span className="text-red-400 mt-0.5">●</span><span className="text-[var(--text-secondary)]">{p}</span></div>)}</div></div>}
+          <div className="card-level-1 p-4 bg-blue-500/5 border border-blue-500/10">
+            <div className="text-xs font-semibold text-[var(--text-primary)] mb-2 flex items-center gap-2"><FileText className="w-3.5 h-3.5 text-[var(--ai-blue-500)]"/>整改建议</div>
+            <div className="space-y-1.5 text-[11px] text-[var(--text-secondary)]">
+              {selectedReport.problems.map((_:string,i:number)=><div key={i}>{i+1}. {['立即通知当班厨师长整改，由后厨全景摄像头二次确认佩戴情况，未整改扣5分','立即安排清洁人员加盖并清理，后厨摄像头自动复核垃圾桶状态，每2小时AI巡检一次','通知后厨负责人重新分类存放，生熟食材须分区冷藏，冷藏柜摄像头持续监测温度及分区状态','立即清理消防通道杂物，恢复通道通畅，安全员复核后拍照上传，通道摄像头设防报警'][i]||'请门店在3个工作日内完成整改并提交复核'}</div>)}
+              <div className="mt-2 pt-2 border-t border-[var(--border-subtle)]"><span className="font-medium text-[var(--text-primary)]">总结：</span>本次巡检共发现{selectedReport.problems.length}项问题，扣分{selectedReport.deducted}分。请在3个工作日内完成整改并提交复核申请，整改完成后由区域经理确认签字。</div>
+            </div>
+          </div>
+        </div>}
+      </Drawer>
     </div>
   )
 }
@@ -476,43 +597,44 @@ export const InspectionFoodSafety: React.FC = () => {
   
   const reports = (() => {
     if (dimension === '门店维度') {
-      return Array.from({length:24},(_,i)=>{
+      return Array.from({length:48},(_,i)=>{
         const store=stores[i%stores.length]
         const t=ledgerTypes[i%3]
-        const months=['2026-05','2026-04','2026-03'];const month=months[Math.floor(i/8)]
+        const months=['2026-05','2026-04','2026-03'];const month=months[Math.floor(i/16)]
+        const score=68+Math.floor(Math.random()*32)
         return {
           id:'RPT'+String(i+1).padStart(3,'0'),store,region:regions[i%4],type:t,month,
-          date:month+'-'+String(10+Math.floor(i/3)),score:72+Math.floor(Math.random()*26),
-          items:15+Math.floor(Math.random()*10),passed:12+Math.floor(Math.random()*8),
-          issues:Math.floor(Math.random()*5),rectified:Math.floor(Math.random()*4),
+          date:month+'-'+String(1+Math.floor(i/2)),score,
+          items:8+Math.floor(Math.random()*18),passed:6+Math.floor(Math.random()*16),
+          issues:Math.floor(Math.random()*4),rectified:Math.floor(Math.random()*4),
           status:['已归档','已归档','已导签','已归档'][i%4],
-          inspector:['张拓','李建','陈静'][i%3],format:t==='月台账'?'PDF':'Excel',
+          inspector:['张拓','李建','陈静','王鹏','刘洋','赵敏'][i%6],format:t==='月台账'?'PDF':'Excel',
         }
       })
     } else if (dimension === '大区维度') {
       return regions.flatMap((region,j)=>{
         const types=ledgerTypes
-        return types.map((t,k)=>{
-          const idx=j*3+k
+        return types.flatMap((t,k)=>Array.from({length:4},(_,n)=>{
+          const idx=j*12+k*4+n
           return {
             id:'REG'+String(idx+1).padStart(3,'0'),store:region+'汇总',region,type:t,
-            month:'2026-05',date:'2026-05-'+String(15+k),
-            score:70+Math.floor(Math.random()*28),items:40+Math.floor(Math.random()*30),
-            passed:35+Math.floor(Math.random()*20),issues:Math.floor(Math.random()*8)+1,
+            month:['2026-05','2026-04','2026-03'][Math.floor(n/4)],date:'2026-'+['05','04','03'][Math.floor(n/4)]+'-'+String(12+n),
+            score:70+Math.floor(Math.random()*28),items:30+Math.floor(Math.random()*30),
+            passed:25+Math.floor(Math.random()*25),issues:Math.floor(Math.random()*6)+1,
             rectified:Math.floor(Math.random()*5),status:'已归档',
             inspector:['陈静','李建','张拓'][j%3],format:t==='月台账'?'PDF':'Excel',
           }
-        })
+        }))
       })
     } else {
-      return ledgerTypes.map((t,k)=>({
-        id:'ENT'+String(k+1).padStart(3,'0'),store:'全品牌8店汇总',region:'企业',type:t,
-        month:'2026-05',date:'2026-05-'+String(20+k),
-        score:75+Math.floor(Math.random()*18),items:80+Math.floor(Math.random()*40),
-        passed:70+Math.floor(Math.random()*30),issues:Math.floor(Math.random()*12)+3,
-        rectified:Math.floor(Math.random()*8)+2,status:'已归档',
+      return ledgerTypes.flatMap((t,k)=>Array.from({length:6},(_,n)=>({
+        id:'ENT'+String(k*6+n+1).padStart(3,'0'),store:'全品牌16店汇总',region:'企业',type:t,
+        month:['2026-05','2026-04'][Math.floor(n/3)],date:'2026-'+['05','04'][Math.floor(n/3)]+'-'+String(18+n),
+        score:75+Math.floor(Math.random()*18),items:60+Math.floor(Math.random()*40),
+        passed:55+Math.floor(Math.random()*35),issues:Math.floor(Math.random()*8)+2,
+        rectified:Math.floor(Math.random()*6)+2,status:'已归档',
         inspector:'张拓',format:t==='月台账'?'PDF':'Excel',
-      }))
+      })))
     }
   })()
 
@@ -694,15 +816,16 @@ export const InspectionFoodSafety: React.FC = () => {
           }))}
         />
 
-        {/* ledger tabs + filter */}
+        {/* ledger tabs */}
+        <Tabs activeKey={ledgerTab} onChange={k => { setLedgerTab(k); setPage(1) }} size="small"
+          items={[{key:'日台账',label:'日台账'},{key:'周台账',label:'周台账'},{key:'月台账',label:'月台账'}]}
+          style={{marginBottom:0}}
+        />
+        {/* filter + export row */}
         <div className="flex items-center gap-3">
-          <Tabs activeKey={ledgerTab} onChange={k => { setLedgerTab(k); setPage(1) }} size="small"
-            items={[{key:'日台账',label:'日台账'},{key:'周台账',label:'周台账'},{key:'月台账',label:'月台账'}]}
-            style={{marginBottom:0}}
-          />
           <Select size="middle" value={storeFilter} onChange={v => { setStoreFilter(v); setPage(1) }} style={{width:140}} options={filterOptions}/>
           <div className="flex-1"/>
-          <Button size="middle" icon={<Download className="w-3.5 h-3.5"/>}>批量导出</Button>
+          <Button size="middle" type="primary" icon={<Download className="w-3.5 h-3.5"/>}>批量导出</Button>
         </div>
       </div>
 
