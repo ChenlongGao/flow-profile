@@ -52,6 +52,7 @@ import { InspectionTask } from './pages/InspectionTask'
 import { InspectionTaskList } from './pages/InspectionTaskList'
 import { FoodSafetyInspection } from './pages/FoodSafetyInspection'
 import { FoodSafetyPrevention } from './pages/FoodSafetyPrevention'
+import { KitchenDisplay } from './pages/KitchenDisplay'
 import { VideoLive, VideoPlayback, VideoDevice } from './pages/InspectionPages'
 import { ViolationPending } from './pages/ViolationPending'
 import { ViolationRectify, ViolationArchive, InspectionStoreReport, InspectionFoodSafety } from './pages/InspectionMore'
@@ -139,10 +140,21 @@ const navGroups: NavGroup[] = [
       { key: 'inspection-combo', icon: Layers, label: '组合巡检' },
       { key: 'inspection-process', icon: ListChecks, label: '流程巡检' },
       { key: 'inspection-spot', icon: Search, label: '临时抽检' },
-      { key: 'food-safety-check', icon: Shield, label: '食安巡检' },
     ],
   },
-  // 8. 违规管理
+  // 8. 食安任务
+  {
+    key: 'food-safety-center',
+    icon: Shield,
+    label: '食安任务',
+    children: [
+      { key: 'food-safety-check', icon: Shield, label: '食安巡检' },
+      { key: 'food-safety-prevention', icon: Shield, label: '食安防控' },
+      { key: 'inspection-food-safety', icon: ShieldCheck, label: '食安报告' },
+      { key: 'kitchen-display', icon: FileText, label: '明厨亮灶' },
+    ],
+  },
+  // 9. 违规管理
   {
     key: 'violation-center',
     icon: AlertTriangle,
@@ -151,20 +163,18 @@ const navGroups: NavGroup[] = [
       { key: 'violation-pending', icon: AlertTriangle, label: '待办违规' },
       { key: 'violation-rectify', icon: CheckCircle2, label: '整改复核' },
       { key: 'violation-archive', icon: FileText, label: '违规档案' },
-      { key: 'food-safety-prevention', icon: Shield, label: '食安防控' },
     ],
   },
-  // 9. 巡检报告
+  // 10. 巡检报告
   {
     key: 'inspection-report',
     icon: FileText,
     label: '巡检报告',
     children: [
       { key: 'inspection-store-report', icon: FileText, label: '门店巡检报告' },
-      { key: 'inspection-food-safety', icon: ShieldCheck, label: '食安合规报告' },
     ],
   },
-  // 10. 培学练考
+  // 11. 培学练考
   {
     key: 'training-center',
     icon: GraduationCap,
@@ -388,6 +398,7 @@ const pageComponents: Record<string, React.FC> = {
   'food-safety-prevention': FoodSafetyPrevention,
   'inspection-store-report': InspectionStoreReport,
   'inspection-food-safety': InspectionFoodSafety,
+  'kitchen-display': KitchenDisplay,
   'training-knowledge': KnowledgeCenter,
   'training-course': TrainingCourse,
   'training-exam': TrainingExam,
@@ -407,7 +418,7 @@ const topNavItems: TopNavItem[] = [
   { key: 'overview', label: '全景总览', desc: '经营总览', icon: LayoutDashboard, groups: [] },
   { key: 'tuodian', label: '选址拓店', desc: '选址拓店', icon: MapPinned, groups: ['location-dashboard', 'location-center', 'opportunity-center', 'expansion-center'] },
   { key: 'guandian', label: '客流管店', desc: '门店管理', icon: Store, groups: ['guandian-dashboard', 'alert-center', 'flow-center', 'flow-alert-center', 'model-predict-center', 'model-diagnosis-center'] },
-  { key: 'zhidian', label: '巡检治店', desc: '智慧治理', icon: Shield, groups: ['inspection-dashboard', 'video-center', 'inspection-task', 'violation-center', 'inspection-report', 'training-center'] },
+  { key: 'zhidian', label: '巡检治店', desc: '智慧治理', icon: Shield, groups: ['inspection-dashboard', 'video-center', 'inspection-task', 'food-safety-center', 'violation-center', 'inspection-report', 'training-center'] },
   { key: 'zhendian', label: '模型诊店', desc: '诊断预警', icon: Stethoscope, groups: ['zhendian-overview','zhendian-diagnosis','zhendian-skills','zhendian-connect','zhendian-schedule'] },
   { key: 'guanli', label: '平台管理', desc: '后台管理', icon: Settings, groups: ['data-center', 'config-center', 'report-center', 'system'] },
 ]
