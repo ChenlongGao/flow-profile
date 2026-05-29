@@ -25,25 +25,24 @@ const MOCK = {
 const buildPredictChart = (histDates: string[], histValues: number[], predDates: string[], predValues: number[], lower: number[], upper: number[], name: string, color: string) => {
   const allDates = [...histDates, ...predDates]; const histLen = histDates.length
   return {
-    grid: { top: '10%', left: '3%', right: '5%', bottom: '12%' },
     tooltip: {
-      trigger: 'axis', backgroundColor: 'rgba(0,0,0,0.8)', borderColor: 'transparent', textStyle: { fontSize: 12, color: '#fff' },
+      trigger: 'axis',
       formatter: (params: any) => {
         const actual = params.find((p: any) => p.seriesName === name)
         const forecast = params.find((p: any) => p.seriesName === '预测值')
         const av = actual?.value
         const fv = forecast?.value
-        let html = `<div style="font-size:11px;color:#999">${params[0].axisValue}</div>`
+        let html = `<div style="font-size:11px">${params[0].axisValue}</div>`
         if (av != null && av !== '') html += `<div style="margin-top:4px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color};margin-right:6px"></span>实际值：<b>${formatNumber(av)} 人次</b></div>`
         if (fv != null && fv !== '') html += `<div style="margin-top:2px"><span style="display:inline-block;width:8px;height:8px;background:${color};margin-right:6px;opacity:0.6;border:1px dashed ${color}"></span>预测值：<b>${formatNumber(fv)} 人次</b></div>`
         const idx = params[0].dataIndex
-        if (idx >= histLen) html += `<div style="margin-top:2px;font-size:10px;color:#666">置信区间：${lower[idx-histLen]} ~ ${upper[idx-histLen]}</div>`
+        if (idx >= histLen) html += `<div style="margin-top:2px;font-size:10px">置信区间：${lower[idx-histLen]} ~ ${upper[idx-histLen]}</div>`
         return html
       },
     },
-    legend: { data: [name, '预测值'], bottom: 0, textStyle: { fontSize: 11 } },
-    xAxis: { type: 'category', data: allDates, axisLabel: { fontSize: 10 }, axisLine: { lineStyle: { color: 'rgba(148,163,184,0.2)' } }, axisTick: { show: false } },
-    yAxis: { type: 'value', name: '人次', axisLabel: { fontSize: 10, formatter: (v: number) => v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v }, splitLine: { lineStyle: { color: 'rgba(148,163,184,0.15)', type: 'dashed' } } },
+    legend: { data: [name, '预测值'], bottom: 0 },
+    xAxis: { type: 'category', data: allDates },
+    yAxis: { type: 'value', name: '人次', axisLabel: { formatter: (v: number) => v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v } },
     series: [
       { name, type: 'line', data: [...histValues, ...Array(predDates.length).fill(null)], itemStyle: { color }, symbol: 'circle', symbolSize: 4, lineStyle: { width: 2.5 } },
       { name: '预测值', type: 'line', data: [...Array(histLen).fill(null), ...predValues], itemStyle: { color, opacity: 0.6 }, symbol: 'diamond', symbolSize: 5, lineStyle: { width: 2, type: 'dashed', color } },
@@ -55,20 +54,18 @@ const buildPredictChart = (histDates: string[], histValues: number[], predDates:
 
 /* ═══ 回测误差评估组件 ═══ */
 const buildApeChart = (dates: string[], ape: number[], name: string, color: string, mape: number) => ({
-  grid: { top: '10%', left: '3%', right: '5%', bottom: '12%' },
   tooltip: {
-    trigger: 'axis', backgroundColor: 'rgba(0,0,0,0.8)', borderColor: 'transparent',
-    textStyle: { fontSize: 12, color: '#fff' },
+    trigger: 'axis',
     formatter: (p: any) => {
       const d = p[0]
       const v = d.value
       const cls = v < 5 ? '#10B981' : v < 10 ? '#F59E0B' : '#EF4444'
-      return `<div style="font-size:11px;color:#999">${d.axisValue}</div><div style="margin-top:4px">${name}误差：<b style="color:${cls}">${v.toFixed(1)}%</b></div><div style="font-size:10px;color:#666">MAPE：${mape}%</div>`
+      return `<div style="font-size:11px">${d.axisValue}</div><div style="margin-top:4px">${name}误差：<b style="color:${cls}">${v.toFixed(1)}%</b></div><div style="font-size:10px">MAPE：${mape}%</div>`
     },
   },
-  legend: { data: [name], bottom: 0, textStyle: { fontSize: 11 } },
-  xAxis: { type: 'category', data: dates, axisLabel: { fontSize: 10, rotate: 30 }, axisLine: { lineStyle: { color: 'rgba(148,163,184,0.2)' } } },
-  yAxis: { type: 'value', name: '误差%', axisLabel: { fontSize: 10, formatter: '{value}%' }, splitLine: { lineStyle: { color: 'rgba(148,163,184,0.15)', type: 'dashed' } }, max: 15 },
+  legend: { data: [name], bottom: 0 },
+  xAxis: { type: 'category', data: dates, axisLabel: { rotate: 30 } },
+  yAxis: { type: 'value', name: '误差%', axisLabel: { formatter: '{value}%' }, max: 15 },
   series: [{
     name, type: 'bar',
     data: ape.map((v, i) => ({
@@ -114,33 +111,33 @@ const BacktestSection: React.FC = () => {
       {/* MAPE 汇总卡 */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: '过店人次 MAPE', value: `${bt.passerby_mape}%`, color: bt.passerby_mape < 10 ? '#10B981' : '#F59E0B', desc: bt.passerby_mape < 5 ? '✓ 优秀' : bt.passerby_mape < 10 ? '○ 良好' : '⚠ 需优化' },
-          { label: '进店人次 MAPE', value: `${bt.enter_mape}%`, color: bt.enter_mape < 10 ? '#10B981' : '#F59E0B', desc: bt.enter_mape < 5 ? '✓ 优秀' : bt.enter_mape < 10 ? '○ 良好' : '⚠ 需优化' },
+          { label: '过店人次 MAPE', value: `${bt.passerby_mape}%`, color: bt.passerby_mape < 10 ? '#10B981' : '#F59E0B', desc: bt.passerby_mape < 5 ? '优秀' : bt.passerby_mape < 10 ? '良好' : '需优化' },
+          { label: '进店人次 MAPE', value: `${bt.enter_mape}%`, color: bt.enter_mape < 10 ? '#10B981' : '#F59E0B', desc: bt.enter_mape < 5 ? '优秀' : bt.enter_mape < 10 ? '良好' : '需优化' },
           { label: '综合 MAPE', value: `${bt.overall_mape}%`, color: bt.overall_mape < 10 ? COLORS.primary : '#F59E0B', desc: '过店+进店平均' },
         ].map(m => (
-          <div key={m.label} className="card-level-1 p-3">
-            <div className="text-[10px] text-[var(--text-muted)]">{m.label}</div>
-            <div className="text-lg font-semibold mt-1 text-number" style={{color: m.color}}>{m.value}</div>
-            <div className="text-[10px] mt-0.5" style={{color: m.color}}>{m.desc}</div>
+          <div key={m.label} className="card-level-1 p-4">
+            <div className="label-primary">{m.label}</div>
+            <div className="value-medium mt-1" style={{color: m.color}}>{m.value}</div>
+            <div className="caption mt-0.5" style={{color: m.color}}>{m.desc}</div>
           </div>
         ))}
       </div>
 
       {/* 误差率趋势图 */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="card-level-1 p-3" style={{aspectRatio:'16/9', minHeight:320}}>
+        <div className="chart-card" style={{height:320}}>
           <div className="chart-title">过店人次误差率趋势 (MAPE {bt.passerby_mape}%)</div>
           <BaseChart option={buildApeChart(dates, bt.passerby_ape || [], '过店人次误差', COLORS.primary, bt.passerby_mape)} height="100%" />
           <div className="mt-2 text-[10px] text-[var(--text-muted)] leading-relaxed">
-            <span className="font-medium">📊 解读：</span>绿色(&lt;5%)→模型准确，黄色(5-10%)→可接受，红色(&gt;10%)→需关注。
+            <span className="font-medium">解读：</span>绿色(&lt;5%)模型准确，黄色(5-10%)可接受，红色(&gt;10%)需关注。
             过店人次预测整体稳定，周末/假日波动略高属正常现象。
           </div>
         </div>
-        <div className="card-level-1 p-3" style={{aspectRatio:'16/9', minHeight:320}}>
+        <div className="chart-card" style={{height:320}}>
           <div className="chart-title">进店人次误差率趋势 (MAPE {bt.enter_mape}%)</div>
           <BaseChart option={buildApeChart(dates, bt.enter_ape || [], '进店人次误差', '#8B5CF6', bt.enter_mape)} height="100%" />
           <div className="mt-2 text-[10px] text-[var(--text-muted)] leading-relaxed">
-            <span className="font-medium">📊 解读：</span>进店人次受消费者行为影响更大，误差率通常略高于过店人次。
+            <span className="font-medium">解读：</span>进店人次受消费者行为影响更大，误差率通常略高于过店人次。
             整体 MAPE {bt.enter_mape}% 在商业预测中为良好水平。
           </div>
         </div>
@@ -312,27 +309,27 @@ export const FlowPredict: React.FC = () => {
       {/* 预测汇总 */}
       <div className="grid grid-cols-4 gap-3">
         {[
-          { label: '日均过店人次(预测)', value: formatNumber(passerbyAvg), color: COLORS.primary, trend: passerbyTrend },
-          { label: '日均进店人次(预测)', value: formatNumber(enterAvg), color: '#8B5CF6', trend: enterTrend },
-          { label: '预测进店率', value: `${(enterAvg/passerbyAvg*100).toFixed(1)}%`, color: '#10B981', trend: '' },
-          { label: '最高预测日', value: predDates.length>0?predDates[predDates.length-1]:'-', color: '#F59E0B', trend: '' },
-        ].map(m=>(<div key={m.label} className="card-level-1 p-3"><div className="text-[10px] text-[var(--text-muted)]">{m.label}</div><div className="text-lg font-semibold mt-1 text-number" style={{color:m.color}}>{m.value}</div>{m.trend&&<div className={`text-[10px] mt-0.5 ${m.trend.includes('↑')?'text-red-400':'text-green-400'}`}>{m.trend}</div>}</div>))}
+          { label: '日均过店人次(预测)', value: formatNumber(passerbyAvg), color: 'text-sky-400', trend: passerbyTrend },
+          { label: '日均进店人次(预测)', value: formatNumber(enterAvg), color: 'text-purple-400', trend: enterTrend },
+          { label: '预测进店率', value: `${(enterAvg/passerbyAvg*100).toFixed(1)}%`, color: 'text-emerald-400', trend: '' },
+          { label: '最高预测日', value: predDates.length>0?predDates[predDates.length-1]:'-', color: 'text-amber-400', trend: '' },
+        ].map(m=>(<div key={m.label} className="card-level-1 p-4"><div className="label-primary">{m.label}</div><div className={`value-medium ${m.color}`}>{m.value}</div>{m.trend&&<div className={`caption ${m.trend.includes('↑')?'text-red-400':'text-emerald-400'}`}>{m.trend}</div>}</div>))}
       </div>
 
       {/* 图表 */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="card-level-1 p-3" style={{aspectRatio:'16/9',minHeight:360}}>
+        <div className="chart-card" style={{height:360}}>
           <div className="chart-title">过店人次预测（未来 7 天）</div>
           <BaseChart option={passerbyChart} height="100%" />
           <div className="mt-2 text-[10px] text-[var(--text-muted)] leading-relaxed">
-            <span className="font-medium text-[var(--text-primary)]">📊 预测解读：</span>未来 7 天日均过店 <b>{formatNumber(passerbyAvg)}</b> 人次，趋势{passerbyTrend}。周末预计小幅回落，工作日回升至峰值。建议重点关注周末促销活动安排。
+            <span className="font-medium text-[var(--text-primary)]">预测解读：</span>未来 7 天日均过店 <b>{formatNumber(passerbyAvg)}</b> 人次，趋势{passerbyTrend}。周末预计小幅回落，工作日回升至峰值。建议重点关注周末促销活动安排。
           </div>
         </div>
-        <div className="card-level-1 p-3" style={{aspectRatio:'16/9',minHeight:360}}>
+        <div className="chart-card" style={{height:360}}>
           <div className="chart-title">进店人次预测（未来 7 天）</div>
           <BaseChart option={enterChart} height="100%" />
           <div className="mt-2 text-[10px] text-[var(--text-muted)] leading-relaxed">
-            <span className="font-medium text-[var(--text-primary)]">📊 预测解读：</span>未来 7 天日均进店 <b>{formatNumber(enterAvg)}</b> 人次，进店率约 {(enterAvg/passerbyAvg*100).toFixed(1)}%。工作日客流稳定，建议在高峰日加强店内导购配置。
+            <span className="font-medium text-[var(--text-primary)]">预测解读：</span>未来 7 天日均进店 <b>{formatNumber(enterAvg)}</b> 人次，进店率约 {(enterAvg/passerbyAvg*100).toFixed(1)}%。工作日客流稳定，建议在高峰日加强店内导购配置。
           </div>
         </div>
       </div>

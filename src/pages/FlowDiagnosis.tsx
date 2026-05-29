@@ -127,7 +127,7 @@ export const FlowDiagnosis:React.FC=()=>{
             <MetricCard color="#F59E0B" label="问题门店" value={bcgHealth.problem} sub="店高·场低"/>
             <MetricCard color="#EF4444" label="失败门店" value={bcgHealth.fail} sub="店低·场低"/>
           </div>
-          <div className="card-level-1 p-4"><div className="chart-title">BCG 四象限分析（门店进店人次 × 商场进店人次）</div><BaseChart option={buildBcgScatter(available)} height="360px"/></div>
+          <div className="chart-card" style={{height:400}}><div className="chart-title">BCG 四象限分析（门店进店人次 x 商场进店人次）</div><BaseChart option={buildBcgScatter(available)} height="100%"/></div>
           <div className="card-level-1 p-4"><div className="chart-title mb-3">BCG 模型明细（共 {available.length} 条）</div>
             <table className="w-full text-xs text-left"><thead><tr className="border-b border-[var(--border-subtle)]">
               {['#','门店名称','进店人次','商场进店','停留(min)','健康度','ABC等级'].map((c,i)=><th key={i} className="py-1.5 px-2 font-medium text-[var(--text-muted)] whitespace-nowrap">{c}</th>)}
@@ -149,7 +149,7 @@ export const FlowDiagnosis:React.FC=()=>{
             <MetricCard color="#3B82F6" label="B-腰部门店" value={abcB} sub="得分 60-84"/>
             <MetricCard color="#EF4444" label="C-尾部门店" value={abcC} sub="得分 &lt; 60"/>
           </div>
-          <div className="card-level-1 p-4"><div className="chart-title">ABC 帕累托分析（进店人次 × 累计占比）</div><BaseChart option={buildPareto(available)} height="360px"/></div>
+          <div className="chart-card" style={{height:400}}><div className="chart-title">ABC 帕累托分析（进店人次 x 累计占比）</div><BaseChart option={buildPareto(available)} height="100%"/></div>
           <div className="card-level-1 p-4"><div className="chart-title mb-3">ABC 门店健康分明细（共 {available.length} 条）</div>
             <table className="w-full text-xs text-left"><thead><tr className="border-b border-[var(--border-subtle)]">
               {['#','门店名称','进店人次','商场进店','得分','等级'].map((c,i)=><th key={i} className="py-1.5 px-2 font-medium text-[var(--text-muted)] whitespace-nowrap">{c}</th>)}
@@ -172,7 +172,7 @@ export const FlowDiagnosis:React.FC=()=>{
 const MetricCard:React.FC<{color:string,label:string,value:any,sub?:string}>=({color,label,value,sub})=>(
   <div className="card-level-1 p-4 flex items-center gap-3">
     <div className="w-2 h-8 rounded-full shrink-0" style={{background:color}}/>
-    <div><div className="text-xs text-[var(--text-muted)]">{label}</div><div className="text-xl font-bold text-[var(--text-primary)]">{value??0}</div>{sub&&<div className="text-[10px] text-[var(--text-muted)]">{sub}</div>}</div>
+    <div><div className="label-primary">{label}</div><div className="value-medium">{value??0}</div>{sub&&<div className="caption">{sub}</div>}</div>
   </div>
 )
 const healthTag=(l:string)=>{const m:Record<string,{c:string,bg:string}>={健康:{c:'#22C55E',bg:'rgba(34,197,94,0.1)'},关注:{c:'#3B82F6',bg:'rgba(59,130,246,0.1)'},问题:{c:'#F59E0B',bg:'rgba(245,158,11,0.1)'},失败:{c:'#EF4444',bg:'rgba(239,68,68,0.1)'}};const s=m[l]||{c:'#999',bg:'rgba(153,153,153,0.1)'};return <span className="px-1.5 py-0.5 rounded text-[10px] font-medium" style={{color:s.c,background:s.bg}}>{l}</span>}
@@ -181,10 +181,10 @@ const levelTag=(l:string)=>{const m:Record<string,{c:string,bg:string}>={A:{c:'#
 const buildBcgScatter=(stores:any[])=>{
   const vd=stores.filter((s:any)=>s.available);const sv=vd.map((s:any)=>s.daily_enter||0);const mv=vd.map((s:any)=>s.mall_daily_enter||0)
   const mS=sv.length?[...sv].sort((a,b)=>a-b)[Math.floor(sv.length/2)]:0;const mM=mv.length?[...mv].sort((a,b)=>a-b)[Math.floor(mv.length/2)]:0
-  return{grid:{top:'8%',right:'3%',bottom:'10%',left:'8%'},tooltip:{formatter:(p:any)=>p.value?`${p.value[2]}<br/>门店:${p.value[0]} 商场:${p.value[1]}`:''},xAxis:{type:'value',name:'门店进店人次→',nameLocation:'center',nameGap:25,axisLabel:{fontSize:10}},yAxis:{type:'value',name:'商场进店人次',axisLabel:{fontSize:10}},series:[{type:'scatter',symbolSize:(val:any)=>Math.min(val[0]*0.05+6,24),data:vd.map((s:any)=>{const v=s.daily_enter||0;const ma=s.mall_daily_enter||1;const c=v>=mS&&ma>=mM?COLORS.green:v<mS&&ma>=mM?COLORS.primary:v>=mS&&ma<mM?COLORS.amber:COLORS.red;return{value:[v,ma,s.name],itemStyle:{color:c+'99'}}}),emphasis:{itemStyle:{color:COLORS.primary}}}],markLine:{silent:true,data:[{xAxis:mS,lineStyle:{color:COLORS.primary,type:'dashed',width:1.5},label:{formatter:`门店中位 ${mS.toFixed(0)}`,fontSize:9,color:COLORS.primary}},{yAxis:mM,lineStyle:{color:'#F59E0B',type:'dashed',width:1.5},label:{formatter:`商场中位 ${mM.toFixed(0)}`,fontSize:9,color:'#F59E0B'}}]}}
+  return{tooltip:{formatter:(p:any)=>p.value?`${p.value[2]}<br/>门店:${p.value[0]} 商场:${p.value[1]}`:''},xAxis:{type:'value',name:'门店进店人次',nameLocation:'center',nameGap:25},yAxis:{type:'value',name:'商场进店人次',axisLabel:{fontSize:10}},series:[{type:'scatter',symbolSize:(val:any)=>Math.min(val[0]*0.05+6,24),data:vd.map((s:any)=>{const v=s.daily_enter||0;const ma=s.mall_daily_enter||1;const c=v>=mS&&ma>=mM?COLORS.green:v<mS&&ma>=mM?COLORS.primary:v>=mS&&ma<mM?COLORS.amber:COLORS.red;return{value:[v,ma,s.name],itemStyle:{color:c+'99'}}}),emphasis:{itemStyle:{color:COLORS.primary}}}],markLine:{silent:true,data:[{xAxis:mS,lineStyle:{color:COLORS.primary,type:'dashed',width:1.5},label:{formatter:`门店中位 ${mS.toFixed(0)}`,fontSize:9,color:COLORS.primary}},{yAxis:mM,lineStyle:{color:'#F59E0B',type:'dashed',width:1.5},label:{formatter:`商场中位 ${mM.toFixed(0)}`,fontSize:9,color:'#F59E0B'}}]}}
 }
 const buildPareto=(stores:any[])=>{
   const sd=[...stores].filter((s:any)=>s.available).sort((a,b)=>(b.daily_enter||0)-(a.daily_enter||0)).slice(0,30)
   const total=sd.reduce((sum,s)=>sum+(s.daily_enter||0),0);let cum=0
-  return{grid:{top:'8%',right:'8%',bottom:'8%',left:'3%'},xAxis:{type:'category',data:sd.map((s:any)=>s.name?.slice(4,10)||''),axisLabel:{fontSize:9,rotate:45}},yAxis:[{type:'value',name:'进店人次',axisLabel:{fontSize:10}},{type:'value',name:'%',max:100,axisLabel:{fontSize:10,formatter:'{value}%'}}],series:[{type:'bar',barMaxWidth:20,yAxisIndex:0,name:'客流',data:sd.map((s:any)=>{const lv=s.abc_level;return{value:s.daily_enter||0,itemStyle:{color:(lv==='A'?'#22C55E':lv==='C'?'#EF4444':'#3B82F6')+'cc'},label:{show:true,position:'top',fontSize:8,color:lv==='A'?'#22C55E':lv==='C'?'#EF4444':'#3B82F6'}}}),label:{show:true,position:'top',fontSize:8}},{type:'line',yAxisIndex:1,name:'累计占比',data:sd.map((s:any)=>{cum+=s.daily_enter||0;return Math.round(cum/total*100)}),lineStyle:{color:'#EF4444',width:2},symbol:'circle',symbolSize:4,itemStyle:{color:'#EF4444'}}]}
+  return{xAxis:{type:'category',data:sd.map((s:any)=>s.name?.slice(4,10)||''),axisLabel:{fontSize:9,rotate:45}},yAxis:[{type:'value',name:'进店人次'},{type:'value',name:'%',max:100,axisLabel:{formatter:'{value}%'}}],series:[{type:'bar',barMaxWidth:20,yAxisIndex:0,name:'客流',data:sd.map((s:any)=>{const lv=s.abc_level;return{value:s.daily_enter||0,itemStyle:{color:(lv==='A'?'#22C55E':lv==='C'?'#EF4444':'#3B82F6')+'cc'},label:{show:true,position:'top',fontSize:8,color:lv==='A'?'#22C55E':lv==='C'?'#EF4444':'#3B82F6'}}}),label:{show:true,position:'top',fontSize:8}},{type:'line',yAxisIndex:1,name:'累计占比',data:sd.map((s:any)=>{cum+=s.daily_enter||0;return Math.round(cum/total*100)}),lineStyle:{color:'#EF4444',width:2},symbol:'circle',symbolSize:4,itemStyle:{color:'#EF4444'}}]}
 }

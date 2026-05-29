@@ -14,3 +14,4 @@ rtsp-server/mediamtx
 
 # 质量报告
 *report*.txt
+backend/__pycache__/

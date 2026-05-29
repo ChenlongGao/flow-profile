@@ -82,23 +82,23 @@ export const Dashboard: React.FC<{setActivePage?: (key:string)=>void}> = ({setAc
       {/* ─── 指标卡 ─── */}
       <div className="grid grid-cols-4 gap-3">
         {[
-          {l:'昨日预警',v:data.today_alerts??0,c:'#EF4444',sub:'全部预警'},
-          {l:'严重预警',v:data.today_critical??0,c:'#DC2626',sub:'需立即处理'},
-          {l:'一般预警',v:data.today_warning??0,c:'#F59E0B',sub:'重点关注'},
-          {l:'轻微预警',v:data.today_minor??0,c:'#1890FF',sub:'常规关注'},
-          {l:'预警门店',v:data.today_alerted_stores??0,c:'#8B5CF6',sub:'触发预警门店'},
-          {l:'指标预警',v:data.today_indicator??0,c:'#0EA5E9',sub:'指标规则触发'},
-          {l:'模型预警',v:data.today_model??0,c:'#10B981',sub:'模型检测触发'},
-          {l:'门店总数',v:data.total_stores??100,c:'var(--ai-blue-500)',sub:`覆盖${data.total_malls??100}家商场`},
-        ].map((m,i)=><div key={i} className="card-level-1 p-4 flex items-center gap-3"><div className="w-2 h-8 rounded-full shrink-0" style={{background:m.c}}/><div><div className="text-xs text-[var(--text-muted)]">{m.l}</div><div className="text-xl font-bold text-[var(--text-primary)]">{m.v}</div><div className="text-[10px] text-[var(--text-muted)]">{m.sub}</div></div></div>)}
+          {l:'昨日预警',v:data.today_alerts??0,cls:'bg-red-500',sub:'全部预警'},
+          {l:'严重预警',v:data.today_critical??0,cls:'bg-red-600',sub:'需立即处理'},
+          {l:'一般预警',v:data.today_warning??0,cls:'bg-amber-500',sub:'重点关注'},
+          {l:'轻微预警',v:data.today_minor??0,cls:'bg-blue-500',sub:'常规关注'},
+          {l:'预警门店',v:data.today_alerted_stores??0,cls:'bg-purple-500',sub:'触发预警门店'},
+          {l:'指标预警',v:data.today_indicator??0,cls:'bg-sky-500',sub:'指标规则触发'},
+          {l:'模型预警',v:data.today_model??0,cls:'bg-emerald-500',sub:'模型检测触发'},
+          {l:'门店总数',v:data.total_stores??100,cls:'bg-[var(--ai-blue-500)]',sub:`覆盖${data.total_malls??100}家商场`},
+        ].map((m,i)=><div key={i} className="card-level-1 p-4 flex items-center gap-3"><div className={`w-2 h-8 rounded-full shrink-0 ${m.cls}`}/><div><div className="label-primary">{m.l}</div><div className="value-medium">{m.v}</div><div className="caption">{m.sub}</div></div></div>)}
       </div>
 
       {/* ─── 数据图表卡 ─── */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="card-level-1 p-3" style={{aspectRatio:'16/9'}}><div className="chart-title">指标预警趋势</div><BaseChart option={indicatorTrendChart(data)} height="100%"/></div>
-        <div className="card-level-1 p-3" style={{aspectRatio:'16/9'}}><div className="chart-title">模型预警趋势</div><BaseChart option={modelTrendChart(data)} height="100%"/></div>
-        <div className="card-level-1 p-3" style={{aspectRatio:'16/9'}}><div className="chart-title">指标预警分布</div><BaseChart option={indicatorDistChart(data)} height="100%"/></div>
-        <div className="card-level-1 p-3" style={{aspectRatio:'16/9'}}><div className="chart-title">模型预警分布</div><BaseChart option={modelDistChart(data)} height="100%"/></div>
+        <div className="chart-card"><div className="chart-title">指标预警趋势</div><BaseChart option={indicatorTrendChart(data)} height="100%"/></div>
+        <div className="chart-card"><div className="chart-title">模型预警趋势</div><BaseChart option={modelTrendChart(data)} height="100%"/></div>
+        <div className="chart-card"><div className="chart-title">指标预警分布</div><BaseChart option={indicatorDistChart(data)} height="100%"/></div>
+        <div className="chart-card"><div className="chart-title">模型预警分布</div><BaseChart option={modelDistChart(data)} height="100%"/></div>
       </div>
 
       {/* ─── 预警明细 ─── */}
@@ -137,8 +137,8 @@ export const Dashboard: React.FC<{setActivePage?: (key:string)=>void}> = ({setAc
   )
 }
 
-const indicatorTrendChart=(data:any)=>({grid:{top:'8%',right:'2%',bottom:'12%',left:'2%'},legend:{show:false},tooltip:{trigger:'axis'},xAxis:{type:'category',data:(data.alert_trend||[]).map((d:any)=>d.date),axisLabel:{fontSize:10}},yAxis:{type:'value',axisLabel:{fontSize:10}},series:[{name:'指标预警',type:'line',data:(data.alert_trend||[]).map((d:any)=>d.indicator),itemStyle:{color:'#0EA5E9'},lineStyle:{color:'#0EA5E9'},symbol:'circle',symbolSize:4}]})
-const modelTrendChart=(data:any)=>({grid:{top:'8%',right:'2%',bottom:'12%',left:'2%'},legend:{show:false},tooltip:{trigger:'axis'},xAxis:{type:'category',data:(data.alert_trend||[]).map((d:any)=>d.date),axisLabel:{fontSize:10}},yAxis:{type:'value',axisLabel:{fontSize:10}},series:[{name:'模型预警',type:'line',data:(data.alert_trend||[]).map((d:any)=>d.model),itemStyle:{color:'#10B981'},lineStyle:{color:'#10B981'},symbol:'circle',symbolSize:4,areaStyle:{color:'rgba(16,185,129,0.1)'}}]})
-const indicatorDistChart=(data:any)=>({legend:{show:false},grid:{show:false,containLabel:false},tooltip:{trigger:'item'},series:[{type:'pie',radius:['40%','65%'],center:['50%','40%'],data:(data.indicator_distribution||data.indicator_types||[]).map((d:any)=>({value:d.count,name:d.type||d.name})),label:{fontSize:10,color:'var(--text-secondary)'},emphasis:{label:{fontSize:14}}}]})
-const modelDistChart=(data:any)=>({legend:{show:false},grid:{show:false,containLabel:false},tooltip:{trigger:'item'},series:[{type:'pie',radius:['40%','65%'],center:['50%','40%'],data:(data.model_distribution||[]).map((d:any)=>({value:d.count,name:d.model_type})),label:{fontSize:10,color:'var(--text-secondary)'},emphasis:{label:{fontSize:14}}}]})
+const indicatorTrendChart=(data:any)=>({xAxis:{type:'category',data:(data.alert_trend||[]).map((d:any)=>d.date)},yAxis:{type:'value'},series:[{name:'指标预警',type:'line',data:(data.alert_trend||[]).map((d:any)=>d.indicator),smooth:true,symbol:'none',areaStyle:{}}]})
+const modelTrendChart=(data:any)=>({xAxis:{type:'category',data:(data.alert_trend||[]).map((d:any)=>d.date)},yAxis:{type:'value'},series:[{name:'模型预警',type:'line',data:(data.alert_trend||[]).map((d:any)=>d.model),smooth:true,symbol:'none',areaStyle:{}}]})
+const indicatorDistChart=(data:any)=>({series:[{type:'pie',radius:['40%','65%'],center:['50%','45%'],data:(data.indicator_distribution||data.indicator_types||[]).map((d:any)=>({value:d.count,name:d.type||d.name})),label:{fontSize:10},emphasis:{label:{fontSize:14}}}]})
+const modelDistChart=(data:any)=>({series:[{type:'pie',radius:['40%','65%'],center:['50%','45%'],data:(data.model_distribution||[]).map((d:any)=>({value:d.count,name:d.model_type})),label:{fontSize:10},emphasis:{label:{fontSize:14}}}]})
 

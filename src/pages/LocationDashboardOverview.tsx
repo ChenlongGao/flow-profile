@@ -176,14 +176,14 @@ export const LocationDashboardOverview: React.FC = () => {
         const Icon = k.icon
         return <div key={i} className="card-level-1 p-4 space-y-2">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{backgroundColor:`${k.color}15`}}>
+            <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${k.color === '#10B981' ? 'bg-emerald-500/10' : k.color === '#F59E0B' ? 'bg-amber-500/10' : k.color === '#EF4444' ? 'bg-red-500/10' : 'bg-blue-500/10'}`}>
               <Icon className="w-3.5 h-3.5" style={{color:k.color}} />
             </div>
-            <span className="text-[11px] text-[var(--text-muted)]">{k.label}</span>
+            <span className="label-primary">{k.label}</span>
           </div>
-          <div className="text-2xl font-bold text-[var(--text-primary)]">{k.value}</div>
-          <div className="text-[10px] text-[var(--text-muted)]">{k.sub}</div>
-          <div className="text-[10px]" style={{color:k.color}}>{k.trend}</div>
+          <div className="value-medium" style={{color: k.color}}>{k.value}</div>
+          <div className="caption">{k.sub}</div>
+          <div className="caption" style={{color:k.color}}>{k.trend}</div>
         </div>
       })}
     </div>
@@ -191,7 +191,7 @@ export const LocationDashboardOverview: React.FC = () => {
     {/* 区域目标进度 + 趋势图 16:9 */}
     <div className="grid grid-cols-2 gap-3">
       {/* 各区域年度目标完成进度 */}
-      <div className="card-level-1 flex flex-col" style={{padding:'16px',aspectRatio:'16/9',overflow:'hidden'}}>
+      <div className="chart-card flex flex-col" style={{height:280,overflow:'hidden'}}>
         <div className="chart-title shrink-0">各区域年度目标完成进度</div>
         <div className="flex flex-col justify-center gap-3" style={{flex:1,paddingTop:0}}>
           {REGION_PROGRESS.map(r => (
@@ -207,7 +207,7 @@ export const LocationDashboardOverview: React.FC = () => {
       </div>
 
       {/* 目标达成趋势（近12月）16:9 + 月/季/年切换 */}
-      <div className="card-level-1 flex flex-col" style={{padding:'16px',aspectRatio:'16/9',overflow:'hidden'}}>
+      <div className="chart-card flex flex-col" style={{height:280,overflow:'hidden'}}>
         <div className="flex items-center justify-between shrink-0 mb-2">
           <div className="chart-title">目标达成趋势</div>
           <Segmented size="small" value={trendGranularity} onChange={v=>setTrendGranularity(v as TrendGranularity)}
