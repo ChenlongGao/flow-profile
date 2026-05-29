@@ -86,11 +86,11 @@ export const InspectionOverview: React.FC = () => {
           <div className="text-2xl font-bold text-[var(--text-primary)]">{k.value}</div><div className="text-[10px] text-[var(--text-muted)]">{k.sub}</div></div>})}
       </div>
 
-      <div className="grid grid-cols-2 gap-4 items-start">
+      <div className="grid grid-cols-2 gap-4">
         {/* 模块2: 违规类型分布（扩展版） */}
-        <div className="card-level-1 p-4 space-y-3">
-          <div className="chart-title flex items-center gap-2"><AlertTriangle className="w-3.5 h-3.5 text-red-400"/>违规类型分布</div>
-          <div className="space-y-2">{violations.map((t,i)=><div key={i} className="flex items-center gap-2">
+        <div className="card-level-1 p-4 flex flex-col">
+          <div className="chart-title flex items-center gap-2 shrink-0"><AlertTriangle className="w-3.5 h-3.5 text-red-400"/>违规类型分布</div>
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-2">{violations.map((t,i)=><div key={i} className="flex items-center gap-2">
             <span className="text-[10px] text-[var(--text-primary)] w-28 truncate">{t.name}</span>
             <div className="flex-1 h-3 bg-[var(--bg-tertiary)] rounded-full overflow-hidden"><div className="h-full rounded-full" style={{width:(t.count/maxV*100)+'%',background:t.color}}/></div>
             <span className="text-[10px] font-medium w-8 text-right" style={{color:t.color}}>{t.count}次</span>
@@ -98,9 +98,9 @@ export const InspectionOverview: React.FC = () => {
         </div>
 
         {/* 模块3: 标签维度门店高频问题排行 */}
-        <div className="card-level-1 p-4 space-y-3">
-          <div className="chart-title flex items-center gap-2"><Tag className="w-3.5 h-3.5 text-purple-400"/>标签维度·门店高频问题</div>
-          <div className="space-y-2">{tagProblems.map((t,i)=><div key={i} className="space-y-1">
+        <div className="card-level-1 p-4 flex flex-col">
+          <div className="chart-title flex items-center gap-2 shrink-0"><Tag className="w-3.5 h-3.5 text-purple-400"/>标签维度·门店高频问题</div>
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-2">{tagProblems.map((t,i)=><div key={i} className="space-y-1">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-medium" style={{color:t.color}}>{t.tag}</span>
               <div className="flex items-center gap-2">
@@ -116,11 +116,11 @@ export const InspectionOverview: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 items-start">
+      <div className="grid grid-cols-2 gap-4">
         {/* 模块4: 区域排行 */}
-        <div className="card-level-1 p-4 space-y-3">
-          <div className="chart-title flex items-center gap-2"><Building2 className="w-3.5 h-3.5 text-blue-400"/>区域巡检质量排行</div>
-          <div className="space-y-2">{regions.map((r,i)=><div key={i} className="flex items-center gap-3 py-1.5 border-b border-[var(--border-subtle)] last:border-0">
+        <div className="card-level-1 p-4 flex flex-col">
+          <div className="chart-title flex items-center gap-2 shrink-0"><Building2 className="w-3.5 h-3.5 text-blue-400"/>区域巡检质量排行</div>
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-2">{regions.map((r,i)=><div key={i} className="flex items-center gap-3 py-1.5 border-b border-[var(--border-subtle)] last:border-0">
             <div className="w-5 h-5 rounded-full bg-[var(--bg-tertiary)] flex items-center justify-center text-[10px] font-bold" style={{color:i<3?'#F59E0B':'var(--text-muted)'}}>{i+1}</div>
             <div className="flex-1"><div className="text-xs font-medium text-[var(--text-primary)]">{r.name}<span className="text-[9px] text-[var(--text-muted)] ml-1">{r.stores}店</span></div>
               <div className="flex items-center gap-3 text-[9px] text-[var(--text-muted)] mt-0.5"><span>得分{r.score}</span><span>合规{r.compliance}%</span><span>整改{r.rectify}%</span></div></div>
@@ -129,9 +129,9 @@ export const InspectionOverview: React.FC = () => {
         </div>
 
         {/* 模块5: 巡检周趋势 */}
-        <div className="card-level-1 p-4 space-y-3">
-          <div className="chart-title flex items-center gap-2"><TrendingUp className="w-3.5 h-3.5 text-green-400"/>巡检评分周趋势</div>
-          <div className="relative h-28">
+        <div className="card-level-1 p-4 flex flex-col">
+          <div className="chart-title flex items-center gap-2 shrink-0"><TrendingUp className="w-3.5 h-3.5 text-green-400"/>巡检评分周趋势</div>
+          <div className="flex-1 min-h-0 relative">
             <svg viewBox="0 0 280 100" className="w-full h-full" preserveAspectRatio="none">
               {[minScore,85,90,95].map(v=><line key={v} x1="20" y1={100-(v-minScore)/(maxScore-minScore)*80} x2="270" y2={100-(v-minScore)/(maxScore-minScore)*80} stroke="var(--border-subtle)" strokeWidth="0.5"/>)}
               <polyline points={weekTrend.map((w,i)=>`${20+i*40},${100-(w.score-minScore)/(maxScore-minScore)*80}`).join(' ')} fill="none" stroke="#10B981" strokeWidth="2"/>
@@ -143,11 +143,11 @@ export const InspectionOverview: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 items-start">
+      <div className="grid grid-cols-2 gap-4">
         {/* 模块6: 门店问题排行 */}
-        <div className="card-level-1 p-4 space-y-3">
-          <div className="chart-title flex items-center gap-2"><Eye className="w-3.5 h-3.5 text-orange-400"/>门店高频问题 TOP10</div>
-          <div className="space-y-1.5">
+        <div className="card-level-1 p-4 flex flex-col">
+          <div className="chart-title flex items-center gap-2 shrink-0"><Eye className="w-3.5 h-3.5 text-orange-400"/>门店高频问题 TOP10</div>
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-1.5">
             {[{s:'成都武侯区店',c:23,sc:68},{s:'重庆解放碑店',c:18,sc:72},{s:'西安钟楼店',c:15,sc:75},{s:'武汉楚河汉街店',c:14,sc:76},{s:'青岛万象城店',c:12,sc:78},{s:'开福万达店',c:10,sc:82},{s:'太平街店',c:9,sc:84},{s:'梅溪湖步步高店',c:8,sc:85},{s:'悦方ID店',c:6,sc:88},{s:'湖滨银泰店',c:5,sc:90}].map((s,i)=><div key={i} className="flex items-center gap-2">
               <span className="w-4 text-center text-[10px] font-bold" style={{color:i<3?'#EF4444':'var(--text-muted)'}}>{i+1}</span>
               <span className="text-[10px] text-[var(--text-primary)] flex-1">{s.s}</span>
@@ -158,9 +158,9 @@ export const InspectionOverview: React.FC = () => {
         </div>
 
         {/* 模块7: 整改追踪 */}
-        <div className="card-level-1 p-4 space-y-3">
-          <div className="chart-title flex items-center gap-2"><Wrench className="w-3.5 h-3.5 text-blue-400"/>整改追踪</div>
-          <div className="space-y-2">
+        <div className="card-level-1 p-4 flex flex-col">
+          <div className="chart-title flex items-center gap-2 shrink-0"><Wrench className="w-3.5 h-3.5 text-blue-400"/>整改追踪</div>
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-2">
             {[
               {s:'后厨未戴厨师帽',total:45,done:38,days:'1.5天'},
               {s:'前厅服务未戴口罩',total:28,done:26,days:'0.8天'},
