@@ -2950,7 +2950,17 @@ def delete_permission(perm_id: int):
 #  客流预测 API
 # ═══════════════════════════════════════════
 
-from predictor import predict_flow, backtest_flow
+# Lazy import: 避免后端启动依赖重型 ML 库
+_predictor_available = False
+try:
+    from predictor import predict_flow, backtest_flow
+    _predictor_available = True
+except ImportError:
+    pass
+
+def _require_predictor():
+    if not _predictor_available:
+        raise HTTPException(503, "预测服务不可用（缺少 numpy/prophet 依赖）")
 
 @app.get("/api/flow/predict")
 def flow_predict(
@@ -2959,6 +2969,7 @@ def flow_predict(
     lookback: int = Query(60),
 ):
     """客流预测：XGBoost + 时间特征"""
+    _require_predictor()
     result = predict_flow(store_id, horizon, lookback)
     return result
 
@@ -2970,6 +2981,7 @@ def flow_backtest(
     lookback: int = Query(60),
 ):
     """回测：对比预测值 vs 真实值，计算 MAPE 误差"""
+    _require_predictor()
     return backtest_flow(store_id, test_start, test_end, lookback)
 
 # ═══════════════════════════════════════════

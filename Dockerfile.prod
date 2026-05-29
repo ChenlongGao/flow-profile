@@ -2,7 +2,7 @@ FROM python:3.11-slim
 RUN apt-get update && apt-get install -y --no-install-recommends nginx supervisor && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY backend/ /app/
-RUN pip install --no-cache-dir uvicorn fastapi PyJWT requests sqlalchemy
+RUN pip install --no-cache-dir fastapi uvicorn PyJWT requests sqlalchemy aiofiles
 COPY dist/index.html /var/www/html/
 COPY dist/assets/ /var/www/html/assets/
 RUN echo 'server { listen 80; root /var/www/html; index index.html; location / { try_files $uri $uri/ /index.html; } location /api { proxy_pass http://127.0.0.1:8003; } }' > /etc/nginx/sites-available/default && rm -f /etc/nginx/sites-enabled/default && ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
