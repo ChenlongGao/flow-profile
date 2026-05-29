@@ -86,7 +86,7 @@ export const InspectionOverview: React.FC = () => {
           <div className="text-2xl font-bold text-[var(--text-primary)]">{k.value}</div><div className="text-[10px] text-[var(--text-muted)]">{k.sub}</div></div>})}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 items-start">
         {/* 模块2: 违规类型分布（扩展版） */}
         <div className="card-level-1 p-4 space-y-3">
           <div className="chart-title flex items-center gap-2"><AlertTriangle className="w-3.5 h-3.5 text-red-400"/>违规类型分布</div>
@@ -116,7 +116,7 @@ export const InspectionOverview: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 items-start">
         {/* 模块4: 区域排行 */}
         <div className="card-level-1 p-4 space-y-3">
           <div className="chart-title flex items-center gap-2"><Building2 className="w-3.5 h-3.5 text-blue-400"/>区域巡检质量排行</div>
@@ -143,7 +143,7 @@ export const InspectionOverview: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 items-start">
         {/* 模块6: 门店问题排行 */}
         <div className="card-level-1 p-4 space-y-3">
           <div className="chart-title flex items-center gap-2"><Eye className="w-3.5 h-3.5 text-orange-400"/>门店高频问题 TOP10</div>
