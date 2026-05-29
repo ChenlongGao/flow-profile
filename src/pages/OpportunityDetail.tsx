@@ -3,10 +3,18 @@ import { Phone, Mail, MapPin, Clock, Calendar, DollarSign, Building2, User, Pape
 import { Tag, Button, Tabs, Progress, Timeline } from 'antd'
 
 const FOLLOW_RECORDS = [
+  { date:'2026-05-28 09:30', type:'面谈', person:'张拓', content:'合同条款最终确认，双方就装修期、营业时间限制、排他性条款达成一致。法务已出具终版合同，等待双方盖章。', attachment:'租赁合同终版.pdf' },
+  { date:'2026-05-22 15:00', type:'邮件', person:'张拓', content:'发送合同修订意见至房东方，主要争议点：装修免租期从30天争取至45天，物业费包含项目明细确认。' },
   { date:'2026-05-15 14:30', type:'面谈', person:'张拓', content:'与房东就租金进行了第二轮谈判，房东同意降租3%，初步达成意向。需在5月20日前提交合同审批。', attachment:'谈判纪要V2.pdf' },
   { date:'2026-05-08 10:00', type:'电话', person:'张拓', content:'与李先生电话沟通，确认了租赁面积和免租期等基础条件。对方表示有其他品牌也在洽谈，需要尽快推进。' },
-  { date:'2026-04-20 16:00', type:'邮件', person:'张拓', content:'发送了品牌介绍资料和初步合作方案，等待对方回复。' },
-  { date:'2026-04-05 11:00', type:'面谈', person:'张拓', content:'首次实地考察选址，与物业负责人初步接触。位置优越，人流可观，符合品牌定位。' },
+  { date:'2026-04-28 11:00', type:'实地考察', person:'张拓', content:'二次实地考察，重点评估周边竞品分布和客流时段特征。工作日午间客流峰值约280人次/小时，周末可达420人次/小时。拍摄现场照片32张。', attachment:'实地考察报告V2.pdf' },
+  { date:'2026-04-20 16:00', type:'邮件', person:'张拓', content:'发送了品牌介绍资料和初步合作方案，等待对方回复。附品牌手册和标准店型效果图。', attachment:'品牌介绍手册.pdf' },
+  { date:'2026-04-05 11:00', type:'面谈', person:'张拓', content:'首次实地考察选址，与物业负责人初步接触。位置优越，人流可观，符合品牌定位。物业方表示有多家品牌在谈，建议尽快推进。' },
+  { date:'2026-03-22 09:00', type:'系统', person:'AI选址引擎', content:'AI模型完成该点位综合评分：商圈匹配度92分、客流潜力85分、竞品密度适中、租金坪效预测1:3.2。综合推荐指数：A级（强烈推荐）。', attachment:'AI选址评估报告.pdf' },
+  { date:'2026-03-18 14:00', type:'电话', person:'张拓', content:'初步电话联系物业方，了解商铺基本情况：面积80㎡、临街一层、租金报价¥290/㎡、3年起租。预约4月5日实地看铺。' },
+  { date:'2026-03-10 10:30', type:'系统', person:'AI选址引擎', content:'根据品牌拓店策略（华中区域·A类商圈·80-120㎡·临街一层），系统自动筛选出江汉路3个候选点位，该点位综合得分排名第1。', attachment:'候选点位对比分析.pdf' },
+  { date:'2026-02-25 16:00', type:'会议', person:'拓店团队', content:'Q1拓店策略会：确定武汉为华中区域重点拓展城市，江汉路商圈为首选目标商圈。年度目标：武汉新开3-5家门店。', attachment:'Q1拓店策略会议纪要.pdf' },
+  { date:'2026-02-10 09:00', type:'系统', person:'AI选址引擎', content:'年度拓店计划启动，AI模型基于城市GDP、商圈客流、竞品布局、消费画像等12个维度，输出全国TOP50城市推荐排名。武汉排名第8，江汉路商圈排名武汉第1。' },
 ]
 
 const OPP_DETAIL = {
@@ -65,7 +73,7 @@ export const OpportunityDetail: React.FC = () => {
         key:'follows', label:'跟进记录', children:<div className="space-y-3 pt-1">
           <Button size="small" type="primary" style={{fontSize:10}}>+ 新增跟进</Button>
           <Timeline items={FOLLOW_RECORDS.map(f=>({
-            color:f.type==='面谈'?'blue':f.type==='电话'?'green':'gray',
+            color:f.type==='面谈'?'blue':f.type==='电话'?'green':f.type==='系统'?'purple':f.type==='会议'?'orange':f.type==='实地考察'?'cyan':'gray',
             children:<div className="space-y-1">
               <div className="flex items-center gap-2 text-[10px] text-[var(--text-muted)]">
                 <span>{f.date}</span><Tag style={{fontSize:9}}>{f.type}</Tag><span>{f.person}</span>
