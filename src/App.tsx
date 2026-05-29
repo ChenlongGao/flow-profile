@@ -57,6 +57,7 @@ import { VideoLive, VideoPlayback, VideoDevice } from './pages/InspectionPages'
 import { ViolationPending } from './pages/ViolationPending'
 import { ViolationRectify, ViolationArchive, InspectionStoreReport, InspectionFoodSafety } from './pages/InspectionMore'
 import { TrainingCourse, TrainingLearn, TrainingExam, TrainingResult, KnowledgeCenter } from './pages/TrainingPages'
+import { KnowledgeHub } from './pages/KnowledgeHub'
 import { ZhendianOverview, ZhendianStoreDiagnosis, ZhendianSkills, ZhendianDataConnect, ZhendianSchedule, StoreDynamicTags } from './pages/ZhendianPages'
 
 /* ─── 导航树（对齐 PRD_PLAN.md） ─── */
@@ -181,6 +182,7 @@ const navGroups: NavGroup[] = [
     label: '培学练考',
     children: [
       { key: 'training-knowledge', icon: Library, label: '知识空间' },
+      { key: 'training-knowledge-hub', icon: BookOpen, label: '知识中心' },
       { key: 'training-course', icon: BookOpen, label: '课程中心' },
       { key: 'training-exam', icon: ClipboardCheck, label: '专项考试' },
       { key: 'training-result', icon: BarChart3, label: '学情考核' },
@@ -400,6 +402,7 @@ const pageComponents: Record<string, React.FC> = {
   'inspection-food-safety': InspectionFoodSafety,
   'kitchen-display': KitchenDisplay,
   'training-knowledge': KnowledgeCenter,
+  'training-knowledge-hub': KnowledgeHub,
   'training-course': TrainingCourse,
   'training-exam': TrainingExam,
   'training-result': TrainingResult,
